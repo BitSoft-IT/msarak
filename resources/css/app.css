@@ -6,6 +6,35 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: system-ui, 'Segoe UI', Tahoma, 'Noto Sans Arabic', Arial, sans-serif;
+
+    /* لون مؤقت محايد؛ تُحدَّث القيم هنا فقط عند اعتماد الهوية */
+    --color-brand-50: #eef2ff;
+    --color-brand-600: #4f46e5;
+    --color-brand-700: #4338ca;
+}
+
+@layer base {
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-brand-600;
+    }
+}
+
+@layer components {
+    .container-page { @apply mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8; }
+
+    .btn { @apply inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-2 text-base font-semibold transition-colors; }
+    .btn-primary { @apply bg-brand-600 text-white hover:bg-brand-700; }
+    .btn-secondary { @apply border border-slate-300 bg-white text-slate-900 hover:bg-slate-100; }
+
+    .field-label { @apply mb-1 block text-sm font-semibold; }
+    .field-input { @apply block min-h-11 w-full rounded-lg border border-slate-400 bg-white px-3 py-2; }
+
+    .alert { @apply rounded-lg border-s-4 p-4 text-base; }
+    .alert-success { @apply border-green-700 bg-green-50 text-green-900; }
+    .alert-error { @apply border-red-700 bg-red-50 text-red-900; }
+
+    .ltr-text { direction: ltr; unicode-bidi: isolate; text-align: start; }
+
+    .skip-link { @apply sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:shadow; }
 }

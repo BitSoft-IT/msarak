@@ -57,7 +57,7 @@ echo Checking required PHP extensions...
 
 set "EXT_FAILED=0"
 
-for %%E in (ctype curl dom fileinfo mbstring openssl pdo_mysql tokenizer xml) do (
+for %%E in (ctype curl dom fileinfo mbstring openssl pdo_mysql pdo_sqlite tokenizer xml) do (
     php -r "exit(extension_loaded('%%E') ? 0 : 1);"
 
     if errorlevel 1 (

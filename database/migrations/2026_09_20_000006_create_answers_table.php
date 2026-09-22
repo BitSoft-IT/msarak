@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -34,6 +35,22 @@ return new class extends Migration
             // Only one effective answer per question within a session.
             $table->unique(['assessment_session_id', 'question_id']);
         });
+
+        // FD-1: primary_option_id must match response_type per spec v1.2:
+        // - 'option' requires a primary_option_id.
+        // - 'none' and 'cannot_judge' forbid a primary_option_id (must be NULL).
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement("CREATE TRIGGER answers_response_type_primary_option_check_insert BEFORE INSERT ON answers FOR EACH ROW WHEN NOT (NEW.response_type IS NOT NULL AND ((NEW.response_type = 'option' AND NEW.primary_option_id IS NOT NULL) OR (NEW.response_type IN ('none', 'cannot_judge') AND NEW.primary_option_id IS NULL))) BEGIN SELECT RAISE(ABORT, 'CHECK constraint failed: answers_response_type_primary_option_check'); END;");
+            DB::statement("CREATE TRIGGER answers_response_type_primary_option_check_update BEFORE UPDATE OF response_type, primary_option_id ON answers FOR EACH ROW WHEN NOT (NEW.response_type IS NOT NULL AND ((NEW.response_type = 'option' AND NEW.primary_option_id IS NOT NULL) OR (NEW.response_type IN ('none', 'cannot_judge') AND NEW.primary_option_id IS NULL))) BEGIN SELECT RAISE(ABORT, 'CHECK constraint failed: answers_response_type_primary_option_check'); END;");
+        } else {
+            DB::statement("ALTER TABLE answers ADD CONSTRAINT answers_response_type_primary_option_check CHECK (
+                (response_type IS NOT NULL) AND (
+                    (response_type = 'option' AND primary_option_id IS NOT NULL)
+                    OR
+                    (response_type IN ('none', 'cannot_judge') AND primary_option_id IS NULL)
+                )
+            )");
+        }
     }
 
     /**

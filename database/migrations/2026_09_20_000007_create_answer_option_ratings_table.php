@@ -35,7 +35,12 @@ return new class extends Migration
         // The rating scale is the closed set {-2, -1, 0, 1, 2}. Laravel's
         // Schema Builder offers no first-class CHECK expression, so the
         // constraint is declared as raw DDL; MySQL 8 enforces it natively.
-        DB::statement('ALTER TABLE answer_option_ratings ADD CONSTRAINT answer_option_ratings_rating_check CHECK (rating BETWEEN -2 AND 2)');
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement("CREATE TRIGGER answer_option_ratings_rating_check_insert BEFORE INSERT ON answer_option_ratings FOR EACH ROW WHEN NEW.rating < -2 OR NEW.rating > 2 BEGIN SELECT RAISE(ABORT, 'CHECK constraint failed: answer_option_ratings_rating_check'); END;");
+            DB::statement("CREATE TRIGGER answer_option_ratings_rating_check_update BEFORE UPDATE OF rating ON answer_option_ratings FOR EACH ROW WHEN NEW.rating < -2 OR NEW.rating > 2 BEGIN SELECT RAISE(ABORT, 'CHECK constraint failed: answer_option_ratings_rating_check'); END;");
+        } else {
+            DB::statement('ALTER TABLE answer_option_ratings ADD CONSTRAINT answer_option_ratings_rating_check CHECK (rating BETWEEN -2 AND 2)');
+        }
     }
 
     /**

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -31,6 +32,14 @@ return new class extends Migration
             $table->unique(['result_id', 'specialization_key']);
             $table->unique(['result_id', 'display_order']);
         });
+
+        // FD-3: Recommendation display_order is defined as 1..5.
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement("CREATE TRIGGER result_recommendations_display_order_check_insert BEFORE INSERT ON result_recommendations FOR EACH ROW WHEN NEW.display_order < 1 OR NEW.display_order > 5 BEGIN SELECT RAISE(ABORT, 'CHECK constraint failed: result_recommendations_display_order_check'); END;");
+            DB::statement("CREATE TRIGGER result_recommendations_display_order_check_update BEFORE UPDATE OF display_order ON result_recommendations FOR EACH ROW WHEN NEW.display_order < 1 OR NEW.display_order > 5 BEGIN SELECT RAISE(ABORT, 'CHECK constraint failed: result_recommendations_display_order_check'); END;");
+        } else {
+            DB::statement('ALTER TABLE result_recommendations ADD CONSTRAINT result_recommendations_display_order_check CHECK (display_order BETWEEN 1 AND 5)');
+        }
     }
 
     /**

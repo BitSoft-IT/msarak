@@ -7,6 +7,7 @@ use App\Models\AssessmentSession;
 use App\Services\AssessmentSessionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AssessmentSessionController extends Controller
 {
@@ -43,7 +44,7 @@ class AssessmentSessionController extends Controller
      */
     public function show(Request $request, AssessmentSession $assessmentSession): JsonResponse
     {
-        if ($assessmentSession->user_id !== $request->user()->id) {
+        if (Gate::denies('view', $assessmentSession)) {
             throw new ResourceNotFoundException();
         }
 

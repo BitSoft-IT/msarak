@@ -1,0 +1,27 @@
+# Backend
+/app/ @Malek711
+/database/ @Malek711
+/routes/ @Malek711
+/config/ @Malek711
+
+# Frontend
+/resources/views/ @ayman-albaidahi
+/resources/css/ @ayman-albaidahi
+/resources/js/ @ayman-albaidahi
+
+# Automated tests
+/tests/ @Abdullah-Al-basheri
+
+# Assessment and system-analysis content
+/docs/04-assessment/ @Mulatef-Aldahia
+/docs/03-system-analysis/ @Mulatef-Aldahia
+
+# Technical design and management
+/docs/02-system-design/ @Alhareith
+/docs/01-management/ @Alhareith
+
+# Repository configuration
+/.github/ @Alhareith
+
+# Protect CODEOWNERS itself
+/.github/CODEOWNERS @Alhareith

@@ -48,7 +48,7 @@
     }
 
     .auth-panel {
-        @apply hidden rounded-2xl bg-gradient-to-br from-brand-600 to-brand-700 p-10 text-white lg:flex lg:flex-col lg:justify-center;
+        @apply relative hidden overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 to-brand-700 p-10 text-white lg:flex lg:flex-col lg:justify-center;
     }
 
     .field-wrap { @apply relative; }
@@ -59,10 +59,6 @@
 
     .field-input-with-toggle { @apply ps-10; }
 
-
-    .auth-panel {
-        @apply relative overflow-hidden;
-    }
 
     .auth-panel::before {
         content: '';

@@ -6,7 +6,9 @@ function toggleVisibility(button) {
     input.type = isHidden ? 'text' : 'password';
     button.setAttribute('aria-pressed', String(isHidden));
     button.setAttribute('aria-label', isHidden ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور');
-    button.textContent = isHidden ? '🙈' : '👁️';
+
+    button.querySelector('[data-icon-show]')?.classList.toggle('hidden', isHidden);
+    button.querySelector('[data-icon-hide]')?.classList.toggle('hidden', !isHidden);
 }
 
 document.addEventListener('click', (event) => {

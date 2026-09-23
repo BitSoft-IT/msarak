@@ -3,10 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@hasSection('title')@yield('title') | @endifمسارك</title>
+
+    {{-- الخط العربي المعتمد: IBM Plex Sans Arabic ذو الرصانة التقنية والوضوح العالي في الواجهات البرمجية --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="flex min-h-screen flex-col bg-slate-50 text-slate-900 antialiased">
+<body class="flex min-h-screen flex-col bg-slate-50 text-slate-900 antialiased font-sans">
     <a href="#main" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
 
     <header class="border-b border-slate-200 bg-white">
@@ -20,6 +27,15 @@
                            class="inline-flex min-h-11 items-center px-1 font-medium hover:text-brand-700"
                            @if (request()->is('/')) aria-current="page" @endif>الرئيسية</a>
                     </li>
+                    @auth
+                        @if (auth()->user()->role === 'student')
+                            <li>
+                                <a href="{{ route('assessment.intro') }}"
+                                   class="inline-flex min-h-11 items-center px-1 font-medium hover:text-brand-700"
+                                   @if (request()->routeIs('assessment.*')) aria-current="page" @endif>استكشاف ميولك</a>
+                            </li>
+                        @endif
+                    @endauth
                     {{-- روابط الصفحات اللاحقة تضاف هنا --}}
                 </ul>
             </nav>

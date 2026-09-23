@@ -6,7 +6,7 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: system-ui, 'Segoe UI', Tahoma, 'Noto Sans Arabic', Arial, sans-serif;
+    --font-sans: 'IBM Plex Sans Arabic', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     /* لون مؤقت محايد؛ تُحدَّث القيم هنا فقط عند اعتماد الهوية */
     --color-brand-50: #eef2ff;
@@ -15,6 +15,10 @@
 }
 
 @layer base {
+    html, body {
+        font-family: var(--font-sans);
+    }
+
     :focus-visible {
         @apply outline-2 outline-offset-2 outline-brand-600;
     }
@@ -83,5 +87,13 @@
     @keyframes auth-card-in {
         from { opacity: 0; transform: translateY(8px); }
         to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .option-card {
+        transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .rating-btn {
+        transition: all 0.15s ease-in-out;
     }
 }

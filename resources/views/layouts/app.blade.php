@@ -14,14 +14,18 @@
             <a href="{{ url('/') }}" class="text-xl font-bold text-brand-700">مسارك</a>
 
             <nav aria-label="التنقل الرئيسي">
-                <ul class="flex flex-wrap items-center gap-x-4 gap-y-1">
-                    <li>
-                        <a href="{{ url('/') }}"
-                           class="inline-flex min-h-11 items-center px-1 font-medium hover:text-brand-700"
-                           @if (request()->is('/')) aria-current="page" @endif>الرئيسية</a>
-                    </li>
-                    {{-- روابط الصفحات اللاحقة تضاف هنا --}}
-                </ul>
+            <ul class="flex flex-wrap items-center gap-x-4 gap-y-1">
+    <li>
+        <a href="{{ url('/') }}"
+           class="inline-flex min-h-11 items-center px-1 font-medium hover:text-brand-700"
+           @if (request()->is('/')) aria-current="page" @endif>الرئيسية</a>
+    </li>
+    <li>
+        <a href="{{ route('specializations.index') }}"
+           class="inline-flex min-h-11 items-center px-1 font-medium hover:text-brand-700"
+           @if (request()->routeIs('specializations.*')) aria-current="page" @endif>التخصصات</a>
+    </li>
+</ul>
             </nav>
         </div>
     </header>

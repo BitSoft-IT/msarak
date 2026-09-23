@@ -4,9 +4,19 @@ use App\Http\Controllers\AssessmentAnswerController;
 use App\Http\Controllers\AssessmentSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResultController;
+use App\Http\Controllers\SpecializationController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
+
+Route::get('/specializations', [SpecializationController::class, 'index'])
+    ->name('specializations.index');
+
+Route::get('/specializations/compare', [SpecializationController::class, 'compare'])
+    ->name('specializations.compare');
+
+Route::get('/specializations/{specialization}', [SpecializationController::class, 'show'])
+    ->name('specializations.show');
 
 Route::middleware(['auth', 'role:student'])->group(function (): void {
     Route::get('/profile/results', [ResultController::class, 'index'])

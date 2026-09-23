@@ -15,5 +15,8 @@ Route::middleware(['auth', 'role:student'])->group(function (): void {
 
     Route::put('/assessment/sessions/{assessmentSession}/answers/{question}', [AssessmentAnswerController::class, 'update'])
         ->name('assessment.answers.update');
+
+    Route::post('/assessment/sessions/{assessmentSession}/complete', [AssessmentSessionController::class, 'complete'])
+        ->name('assessment.sessions.complete');
 });
 require __DIR__.'/auth.php';

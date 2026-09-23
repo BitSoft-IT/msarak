@@ -56,10 +56,13 @@
         @endif
 
         @if (!empty($specialization['id']))
-            <a href="{{ route('specializations.compare', ['first' => $specialization['id']]) }}"
-               class="mt-8 inline-block rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white">
+            <button type="button"
+                    class="compare-toggle mt-8 inline-block rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white"
+                    data-id="{{ $specialization['id'] }}"
+                    data-name="{{ $specialization['name'] ?? '' }}"
+                    data-redirect="{{ route('specializations.index') }}">
                 قارن هذا التخصص
-            </a>
+            </button>
         @endif
     </article>
 @endsection

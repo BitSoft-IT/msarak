@@ -40,7 +40,7 @@ document.addEventListener('click', (event) => {
     const button = event.target.closest('.compare-toggle');
     if (button) {
         let selection = getSelection();
-        const { id, name } = button.dataset;
+        const { id, name, redirect } = button.dataset;
         const exists = selection.some((item) => item.id === id);
 
         if (exists) {
@@ -56,6 +56,10 @@ document.addEventListener('click', (event) => {
         }
 
         setSelection(selection);
+
+        if (redirect && !exists) {
+            window.location.href = redirect;
+        }
         return;
     }
 

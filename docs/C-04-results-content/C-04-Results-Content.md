@@ -359,8 +359,7 @@
 [2]: ../03-system-analysis/SYSTEM_WORKFLOWS.md "مسارات عمل النظام"
 [3]: ./../C-03-assessment-content/C-03-Content-Delivery.md "محتوى رحلة التقييم وقبول الاستخدام"
 [4]: ../../resources/data/specializations.json "دليل التخصصات الحالي"
-[5]: https://www.onetcenter.org/reports/IP_Manual.html "O*NET Interest Profiler Technical Manual"
-[6]: https://www.aera.net/publications/books/standards-for-educational-psychological-testing-2014-edition "Standards for Educational and Psychological Testing"
+[5]: https://www.aera.net/publications/books/standards-for-educational-psychological-testing-2014-edition "Standards for Educational and Psychological Testing"
 
 ---
 

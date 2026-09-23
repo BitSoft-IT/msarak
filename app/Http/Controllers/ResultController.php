@@ -49,7 +49,7 @@ class ResultController extends Controller
     public function show(Result $result): JsonResponse
     {
         if (Gate::denies('view', $result)) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException;
         }
 
         $result->load([

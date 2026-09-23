@@ -1145,7 +1145,7 @@ class AssessmentSessionTest extends TestCase
         $option = $question->questionOptions()->first();
 
         // Simulate failure by mocking or injecting a failure into the service save
-        $this->mock(AssessmentSessionService::class, function ($mock) use ($session, $question) {
+        $this->mock(AssessmentSessionService::class, function ($mock) {
             $mock->shouldReceive('saveAnswer')
                 ->once()
                 ->andThrow(new \RuntimeException('Database disk failure simulation'));

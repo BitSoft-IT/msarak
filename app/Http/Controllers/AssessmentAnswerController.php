@@ -39,7 +39,7 @@ class AssessmentAnswerController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            throw new AnswerSaveFailedException();
+            throw new AnswerSaveFailedException;
         }
     }
 }

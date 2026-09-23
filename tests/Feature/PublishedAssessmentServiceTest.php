@@ -8,7 +8,6 @@ use App\Models\Question;
 use App\Models\QuestionOption;
 use App\Services\PublishedAssessmentService;
 use Database\Seeders\AssessmentQuestionBankSeeder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +44,7 @@ class PublishedAssessmentServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = new PublishedAssessmentService();
+        $this->service = new PublishedAssessmentService;
     }
 
     // ---------------------------------------------------------------
@@ -779,8 +778,8 @@ class PublishedAssessmentServiceTest extends TestCase
         $this->seed(AssessmentQuestionBankSeeder::class);
 
         // Available to backend scoring layers...
-        $this->assertContains('riasec_code', (new QuestionOption())->getFillable());
-        $this->assertNotContains('riasec_code', (new QuestionOption())->getHidden());
+        $this->assertContains('riasec_code', (new QuestionOption)->getFillable());
+        $this->assertNotContains('riasec_code', (new QuestionOption)->getHidden());
 
         // ...but absent from the student payload.
         $payload = $this->service->getStudentPayload();

@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ResourceNotFoundException;
 use App\Models\AssessmentSession;
+use App\Services\AssessmentCompletionService;
 use App\Services\AssessmentSessionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AssessmentSessionController extends Controller
 {
     public function __construct(
-        protected AssessmentSessionService $sessionService
+        protected AssessmentSessionService $sessionService,
+        protected AssessmentCompletionService $completionService,
     ) {}
 
     /**
@@ -43,7 +46,7 @@ class AssessmentSessionController extends Controller
      */
     public function show(Request $request, AssessmentSession $assessmentSession): JsonResponse
     {
-        if ($assessmentSession->user_id !== $request->user()->id) {
+        if (Gate::denies('view', $assessmentSession)) {
             throw new ResourceNotFoundException();
         }
 
@@ -53,5 +56,27 @@ class AssessmentSessionController extends Controller
             'data' => $data,
             'message' => 'تم تحميل جلسة التقييم.',
         ], 200);
+    }
+
+    /**
+     * Complete a fully answered session and persist its immutable result.
+     */
+    public function complete(Request $request, AssessmentSession $assessmentSession): JsonResponse
+    {
+        if (Gate::denies('update', $assessmentSession)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $result = $this->completionService->complete($assessmentSession);
+
+        return response()->json([
+            'data' => [
+                'session_id' => $assessmentSession->id,
+                'status' => 'completed',
+                'result_id' => $result->id,
+                'result_url' => "/results/{$result->id}",
+            ],
+            'message' => 'اكتمل الاختبار وحُفظت النتيجة.',
+        ]);
     }
 }

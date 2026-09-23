@@ -8,6 +8,7 @@ use App\Services\AssessmentCompletionService;
 use App\Services\AssessmentSessionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AssessmentSessionController extends Controller
 {
@@ -45,8 +46,8 @@ class AssessmentSessionController extends Controller
      */
     public function show(Request $request, AssessmentSession $assessmentSession): JsonResponse
     {
-        if ($assessmentSession->user_id !== $request->user()->id) {
-            throw new ResourceNotFoundException;
+        if (Gate::denies('view', $assessmentSession)) {
+            throw new ResourceNotFoundException();
         }
 
         $data = $this->sessionService->getSessionState($assessmentSession);
@@ -62,8 +63,8 @@ class AssessmentSessionController extends Controller
      */
     public function complete(Request $request, AssessmentSession $assessmentSession): JsonResponse
     {
-        if ($assessmentSession->user_id !== $request->user()->id) {
-            throw new ResourceNotFoundException;
+        if (Gate::denies('update', $assessmentSession)) {
+            throw new ResourceNotFoundException();
         }
 
         $result = $this->completionService->complete($assessmentSession);

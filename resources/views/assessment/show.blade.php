@@ -17,11 +17,26 @@
 
     {{-- نصوص السلم الخماسي للتقييم الإضافي وفق نصوص C-03 المعتمدة للوصولية والفحص --}}
     <template id="rating-scale-legend">
-        <div data-rating="2"><span aria-hidden="true">😊</span><span>يشبهني جدًا</span></div>
-        <div data-rating="1"><span aria-hidden="true">🙂</span><span>يشبهني</span></div>
-        <div data-rating="0"><span aria-hidden="true">😐</span><span>محايد / غير متأكد</span></div>
-        <div data-rating="-1"><span aria-hidden="true">🙁</span><span>لا يشبهني</span></div>
-        <div data-rating="-2"><span aria-hidden="true">😞</span><span>لا يشبهني إطلاقًا</span></div>
+        <div data-rating="2">
+            <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 9.5c.5-.8 1.5-.8 2 0"/><path d="M14 9.5c.5-.8 1.5-.8 2 0"/><path d="M8 14c1 2.5 7 2.5 8 0"/></svg>
+            <span>يشبهني جدًا</span>
+        </div>
+        <div data-rating="1">
+            <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3"/><line x1="15" y1="9.5" x2="15.01" y2="9.5" stroke-width="3"/><path d="M8.5 13.5c1 1.8 6 1.8 7 0"/></svg>
+            <span>يشبهني</span>
+        </div>
+        <div data-rating="0">
+            <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3"/><line x1="15" y1="9.5" x2="15.01" y2="9.5" stroke-width="3"/><line x1="8.5" y1="14" x2="15.5" y2="14" stroke-width="2"/></svg>
+            <span>محايد / غير متأكد</span>
+        </div>
+        <div data-rating="-1">
+            <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3"/><line x1="15" y1="9.5" x2="15.01" y2="9.5" stroke-width="3"/><path d="M8.5 15.5c1-1.5 6-1.5 7 0"/></svg>
+            <span>لا يشبهني</span>
+        </div>
+        <div data-rating="-2">
+            <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.5 10.5c.5-.5 1.5-.5 2 0"/><path d="M13.5 10.5c.5-.5 1.5-.5 2 0"/><path d="M8 16c1.2-2.5 6.8-2.5 8 0"/></svg>
+            <span>لا يشبهني إطلاقًا</span>
+        </div>
     </template>
 
     {{-- رأس التقييم ومؤشر التقدم --}}

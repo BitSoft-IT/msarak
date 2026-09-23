@@ -143,32 +143,61 @@
 
             {{-- معاينة بصرية حية لمستويات السلم الخماسي المعتمدة --}}
             <div class="mt-3 ps-12">
-                <span class="text-xs font-semibold text-slate-500 block mb-2">مستويات التقييم المعتمدة مع الرموز التعبيرية:</span>
-                <div class="flex flex-wrap gap-2">
-                    <span class="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-800 shadow-2xs">
-                        <span aria-hidden="true">😊</span>
+                <span class="text-xs font-semibold text-slate-500 block mb-2">مستويات التقييم المعتمدة ومؤشراتها:</span>
+                <div class="flex flex-wrap gap-2.5">
+                    <span class="inline-flex items-center gap-2 rounded-xl border border-emerald-200/90 bg-emerald-50/80 px-3.5 py-2 text-xs font-bold text-emerald-800 shadow-2xs transition-all hover:bg-emerald-100">
+                        <svg class="h-4 w-4 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M8 9.5c.5-.8 1.5-.8 2 0" />
+                            <path d="M14 9.5c.5-.8 1.5-.8 2 0" />
+                            <path d="M8 14c1 2.5 7 2.5 8 0" />
+                        </svg>
                         <span>يشبهني جدًا</span>
-                        <span class="text-[10px] text-emerald-600 bg-white/70 px-1.5 py-0.5 rounded-md font-mono">(+2)</span>
+                        <span class="text-[10px] text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(+2)</span>
                     </span>
-                    <span class="inline-flex items-center gap-1.5 rounded-xl border border-teal-200 bg-teal-50 px-3 py-1.5 text-xs font-bold text-teal-800 shadow-2xs">
-                        <span aria-hidden="true">🙂</span>
+
+                    <span class="inline-flex items-center gap-2 rounded-xl border border-teal-200/90 bg-teal-50/80 px-3.5 py-2 text-xs font-bold text-teal-800 shadow-2xs transition-all hover:bg-teal-100">
+                        <svg class="h-4 w-4 text-teal-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3" />
+                            <line x1="15" y1="9.5" x2="15.01" y2="9.5" stroke-width="3" />
+                            <path d="M8.5 13.5c1 1.8 6 1.8 7 0" />
+                        </svg>
                         <span>يشبهني</span>
-                        <span class="text-[10px] text-teal-600 bg-white/70 px-1.5 py-0.5 rounded-md font-mono">(+1)</span>
+                        <span class="text-[10px] text-teal-700 bg-teal-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(+1)</span>
                     </span>
-                    <span class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-700 shadow-2xs">
-                        <span aria-hidden="true">😐</span>
+
+                    <span class="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-slate-100/80 px-3.5 py-2 text-xs font-bold text-slate-800 shadow-2xs transition-all hover:bg-slate-200">
+                        <svg class="h-4 w-4 text-slate-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3" />
+                            <line x1="15" y1="9.5" x2="15.01" y2="9.5" stroke-width="3" />
+                            <line x1="8.5" y1="14" x2="15.5" y2="14" stroke-width="2" />
+                        </svg>
                         <span>محايد / غير متأكد</span>
-                        <span class="text-[10px] text-slate-500 bg-white/70 px-1.5 py-0.5 rounded-md font-mono">(0)</span>
+                        <span class="text-[10px] text-slate-600 bg-slate-200/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(0)</span>
                     </span>
-                    <span class="inline-flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-800 shadow-2xs">
-                        <span aria-hidden="true">🙁</span>
+
+                    <span class="inline-flex items-center gap-2 rounded-xl border border-amber-200/90 bg-amber-50/80 px-3.5 py-2 text-xs font-bold text-amber-800 shadow-2xs transition-all hover:bg-amber-100">
+                        <svg class="h-4 w-4 text-amber-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3" />
+                            <line x1="15" y1="9.5" x2="15.01" y2="9.5" stroke-width="3" />
+                            <path d="M8.5 15.5c1-1.5 6-1.5 7 0" />
+                        </svg>
                         <span>لا يشبهني</span>
-                        <span class="text-[10px] text-amber-600 bg-white/70 px-1.5 py-0.5 rounded-md font-mono">(-1)</span>
+                        <span class="text-[10px] text-amber-700 bg-amber-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(-1)</span>
                     </span>
-                    <span class="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-800 shadow-2xs">
-                        <span aria-hidden="true">😞</span>
+
+                    <span class="inline-flex items-center gap-2 rounded-xl border border-rose-200/90 bg-rose-50/80 px-3.5 py-2 text-xs font-bold text-rose-800 shadow-2xs transition-all hover:bg-rose-100">
+                        <svg class="h-4 w-4 text-rose-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M8.5 10.5c.5-.5 1.5-.5 2 0" />
+                            <path d="M13.5 10.5c.5-.5 1.5-.5 2 0" />
+                            <path d="M8 16c1.2-2.5 6.8-2.5 8 0" />
+                        </svg>
                         <span>لا يشبهني إطلاقًا</span>
-                        <span class="text-[10px] text-rose-600 bg-white/70 px-1.5 py-0.5 rounded-md font-mono">(-2)</span>
+                        <span class="text-[10px] text-rose-700 bg-rose-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(-2)</span>
                     </span>
                 </div>
             </div>

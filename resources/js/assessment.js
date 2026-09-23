@@ -9,35 +9,35 @@ const RATING_LEVELS = [
     {
         value: 2,
         label: 'يشبهني جدًا',
-        emoji: '😊',
+        iconSvg: `<svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 9.5c.5-.8 1.5-.8 2 0"/><path d="M14 9.5c.5-.8 1.5-.8 2 0"/><path d="M8 14c1 2.5 7 2.5 8 0"/></svg>`,
         activeClass: 'bg-emerald-600 text-white border-emerald-600 shadow-xs',
         idleClass: 'bg-emerald-50/60 text-emerald-800 border-emerald-200 hover:bg-emerald-100',
     },
     {
         value: 1,
         label: 'يشبهني',
-        emoji: '🙂',
+        iconSvg: `<svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3"/><line x1="15" y1="9.5" x2="15.01" y2="9.5" stroke-width="3"/><path d="M8.5 13.5c1 1.8 6 1.8 7 0"/></svg>`,
         activeClass: 'bg-teal-600 text-white border-teal-600 shadow-xs',
         idleClass: 'bg-teal-50/60 text-teal-800 border-teal-200 hover:bg-teal-100',
     },
     {
         value: 0,
         label: 'محايد / غير متأكد',
-        emoji: '😐',
+        iconSvg: `<svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3"/><line x1="15" y1="9.5" x2="15.01" y2="9.5" stroke-width="3"/><line x1="8.5" y1="14" x2="15.5" y2="14" stroke-width="2"/></svg>`,
         activeClass: 'bg-slate-700 text-white border-slate-700 shadow-xs',
         idleClass: 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200',
     },
     {
         value: -1,
         label: 'لا يشبهني',
-        emoji: '🙁',
+        iconSvg: `<svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3"/><line x1="15" y1="9.5" x2="15.01" y2="9.5" stroke-width="3"/><path d="M8.5 15.5c1-1.5 6-1.5 7 0"/></svg>`,
         activeClass: 'bg-amber-600 text-white border-amber-600 shadow-xs',
         idleClass: 'bg-amber-50/60 text-amber-800 border-amber-200 hover:bg-amber-100',
     },
     {
         value: -2,
         label: 'لا يشبهني إطلاقًا',
-        emoji: '😞',
+        iconSvg: `<svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.5 10.5c.5-.5 1.5-.5 2 0"/><path d="M13.5 10.5c.5-.5 1.5-.5 2 0"/><path d="M8 16c1.2-2.5 6.8-2.5 8 0"/></svg>`,
         activeClass: 'bg-rose-600 text-white border-rose-600 shadow-xs',
         idleClass: 'bg-rose-50/60 text-rose-800 border-rose-200 hover:bg-rose-100',
     },
@@ -341,12 +341,12 @@ class AssessmentJourney {
                     const isSelectedRating = currentRating === level.value;
                     const ratingBtn = document.createElement('button');
                     ratingBtn.type = 'button';
-                    ratingBtn.className = `rating-btn inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
+                    ratingBtn.className = `rating-btn inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all shadow-2xs hover:shadow-xs active:scale-95 ${
                         isSelectedRating ? level.activeClass : level.idleClass
                     }`;
 
                     ratingBtn.innerHTML = `
-                        <span aria-hidden="true" class="text-sm">${level.emoji}</span>
+                        ${level.iconSvg}
                         <span>${level.label}</span>
                     `;
 

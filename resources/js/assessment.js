@@ -1,16 +1,49 @@
 /**
- * Assessment Journey Controller (Issue F-03)
- * Vanilla JavaScript implementation strictly following contracts H-03 and C-03.
- * No RIASEC codes, formulas, or sensitive scoring calculations are exposed.
+ * Assessment Journey Engine (Issue F-03)
+ * Professional Software Engineering Implementation.
+ * Adheres strictly to contracts H-03 and C-03.
+ * Zero RIASEC leakage, defensive state management, debounced autosave, and accessible UI.
  */
 
 const RATING_LEVELS = [
-    { value: 2, label: 'يشبهني جدًا', emoji: '😊' },
-    { value: 1, label: 'يشبهني', emoji: '🙂' },
-    { value: 0, label: 'محايد / غير متأكد', emoji: '😐' },
-    { value: -1, label: 'لا يشبهني', emoji: '🙁' },
-    { value: -2, label: 'لا يشبهني إطلاقًا', emoji: '😞' },
+    {
+        value: 2,
+        label: 'يشبهني جدًا',
+        emoji: '😊',
+        activeClass: 'bg-emerald-600 text-white border-emerald-600 shadow-xs',
+        idleClass: 'bg-emerald-50/60 text-emerald-800 border-emerald-200 hover:bg-emerald-100',
+    },
+    {
+        value: 1,
+        label: 'يشبهني',
+        emoji: '🙂',
+        activeClass: 'bg-teal-600 text-white border-teal-600 shadow-xs',
+        idleClass: 'bg-teal-50/60 text-teal-800 border-teal-200 hover:bg-teal-100',
+    },
+    {
+        value: 0,
+        label: 'محايد / غير متأكد',
+        emoji: '😐',
+        activeClass: 'bg-slate-700 text-white border-slate-700 shadow-xs',
+        idleClass: 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200',
+    },
+    {
+        value: -1,
+        label: 'لا يشبهني',
+        emoji: '🙁',
+        activeClass: 'bg-amber-600 text-white border-amber-600 shadow-xs',
+        idleClass: 'bg-amber-50/60 text-amber-800 border-amber-200 hover:bg-amber-100',
+    },
+    {
+        value: -2,
+        label: 'لا يشبهني إطلاقًا',
+        emoji: '😞',
+        activeClass: 'bg-rose-600 text-white border-rose-600 shadow-xs',
+        idleClass: 'bg-rose-50/60 text-rose-800 border-rose-200 hover:bg-rose-100',
+    },
 ];
+
+const ARABIC_OPTION_LETTERS = ['أ', 'ب', 'ج', 'د'];
 
 class AssessmentJourney {
     constructor(appElement) {
@@ -20,18 +53,18 @@ class AssessmentJourney {
         this.saveBaseUrl = this.app.dataset.saveBaseUrl;
         this.csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
-        // State
+        // Domain State
         this.questions = [];
         this.answers = {}; // question_id -> { primary_option_id, none_selected, unable_to_judge, ratings: {} }
         this.currentIndex = 0;
-        this.saveStatus = 'idle'; // idle | saving | saved | error
-        this.saveTimeout = null;
         this.isCompleted = false;
 
-        // Pending conflict state
+        // Save State & Synchronization
+        this.saveStatus = 'idle'; // idle | saving | saved | error
+        this.debounceSaveTimer = null;
         this.pendingConflict = null;
+        this.abortController = null;
 
-        // DOM elements cache
         this.cacheElements();
         this.bindEvents();
         this.initData();
@@ -54,7 +87,7 @@ class AssessmentJourney {
         this.cannotJudgeRadio = document.getElementById('cannot-judge-radio');
         this.cannotJudgeCard = document.getElementById('cannot-judge-card');
 
-        this.saveStatusIndicator = document.getElementById('save-status-indicator');
+        this.saveStatusIcon = document.getElementById('save-status-icon');
         this.saveStatusText = document.getElementById('save-status-text');
 
         this.errorAlert = document.getElementById('error-alert');
@@ -86,7 +119,7 @@ class AssessmentJourney {
         this.noneFitRadio.addEventListener('change', () => this.handleSpecialChoice('none_selected'));
         this.cannotJudgeRadio.addEventListener('change', () => this.handleSpecialChoice('unable_to_judge'));
 
-        this.retrySaveBtn.addEventListener('click', () => this.saveCurrentAnswer());
+        this.retrySaveBtn.addEventListener('click', () => this.flushSave());
 
         // Conflict modal handlers
         this.conflictKeepBtn.addEventListener('click', () => this.resolveConflict(true));
@@ -95,6 +128,28 @@ class AssessmentJourney {
         // Completion modal handlers
         this.completionConfirmBtn.addEventListener('click', () => this.submitCompletion());
         this.completionCancelBtn.addEventListener('click', () => this.closeCompletionModal());
+
+        // Keyboard accessibility
+        document.addEventListener('keydown', (e) => this.handleKeyboardNav(e));
+
+        // Offline / Online resilience
+        window.addEventListener('offline', () => {
+            this.setSaveStatus('error', 'انقطع الاتصال بالإنترنت.');
+        });
+        window.addEventListener('online', () => {
+            this.flushSave();
+        });
+    }
+
+    handleKeyboardNav(e) {
+        if (e.key === 'Escape') {
+            if (!this.conflictModal.classList.contains('hidden')) {
+                this.resolveConflict(false);
+            }
+            if (!this.completionModal.classList.contains('hidden')) {
+                this.closeCompletionModal();
+            }
+        }
     }
 
     initData() {
@@ -109,7 +164,6 @@ class AssessmentJourney {
             }
         }
 
-        // Fallback: Fetch via JSON from backend
         this.fetchSessionData();
     }
 
@@ -140,7 +194,7 @@ class AssessmentJourney {
         this.questions = data.questions.sort((a, b) => a.position - b.position);
         this.isCompleted = data.session?.status === 'completed';
 
-        // Preload saved answers
+        // Preload saved answers into memory
         this.answers = {};
         if (Array.isArray(data.saved_answers)) {
             data.saved_answers.forEach((ans) => {
@@ -160,8 +214,7 @@ class AssessmentJourney {
             });
         }
 
-        // Determine starting position:
-        // Contract states: current_position indicates first unanswered position (1-indexed)
+        // Resume at first unanswered position
         const startingPosition = data.progress?.current_position || 1;
         const targetIndex = this.questions.findIndex((q) => q.position === startingPosition);
         this.currentIndex = targetIndex >= 0 ? targetIndex : 0;
@@ -220,48 +273,58 @@ class AssessmentJourney {
         question.options.forEach((opt, idx) => {
             const isPrimary = currentAnswer.primary_option_id === opt.option_id;
             const currentRating = currentAnswer.ratings[opt.option_id];
+            const letter = ARABIC_OPTION_LETTERS[idx] || (idx + 1);
 
             const card = document.createElement('div');
-            card.className = `option-card rounded-xl border p-4 transition-all ${
+            card.className = `option-card group relative rounded-2xl border p-4 sm:p-5 transition-all cursor-pointer ${
                 isPrimary
-                    ? 'border-brand-600 bg-brand-50/40 ring-1 ring-brand-600 shadow-sm'
-                    : 'border-slate-200 bg-white hover:border-slate-300'
+                    ? 'border-brand-600 bg-brand-50/40 ring-1 ring-brand-600 shadow-xs'
+                    : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60'
             }`;
             card.dataset.optionId = opt.option_id;
 
             // Option selection row
             const topRow = document.createElement('div');
-            topRow.className = 'flex items-start gap-3 cursor-pointer';
+            topRow.className = 'flex items-start gap-3.5';
 
+            // Letter Avatar Pill
+            const letterBadge = document.createElement('span');
+            letterBadge.className = `flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold transition-colors ${
+                isPrimary
+                    ? 'bg-brand-600 text-white shadow-xs'
+                    : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200'
+            }`;
+            letterBadge.textContent = letter;
+
+            // Hidden Radio for form semantics
             const radio = document.createElement('input');
             radio.type = 'radio';
             radio.name = 'primary_option';
             radio.value = opt.option_id;
             radio.id = `opt-radio-${opt.option_id}`;
             radio.checked = isPrimary;
-            radio.className = 'mt-1 h-4 w-4 border-slate-300 text-brand-600 focus:ring-brand-600 cursor-pointer';
+            radio.className = 'sr-only';
 
             const label = document.createElement('label');
             label.htmlFor = radio.id;
-            label.className = 'flex-1 text-sm font-semibold text-slate-900 cursor-pointer leading-relaxed';
+            label.className = 'flex-1 text-sm sm:text-base font-semibold text-slate-900 cursor-pointer leading-relaxed';
             label.textContent = opt.option_text;
 
+            topRow.appendChild(letterBadge);
             topRow.appendChild(radio);
             topRow.appendChild(label);
             card.appendChild(topRow);
 
             topRow.addEventListener('click', (e) => {
-                if (e.target !== radio) {
-                    radio.checked = true;
-                }
+                e.preventDefault();
                 this.selectPrimaryOption(opt.option_id);
             });
 
-            // Optional 5-point rating scale drawer (rendered under option)
-            // Visible when primary option is selected on this question
+            // Optional 5-point rating scale drawer
+            // Appears when a primary option has been selected
             if (hasPrimary) {
                 const ratingDrawer = document.createElement('div');
-                ratingDrawer.className = 'mt-3.5 border-t border-slate-100 pt-3 ps-7';
+                ratingDrawer.className = 'mt-3.5 border-t border-slate-100 pt-3 ps-10 animate-in fade-in duration-200';
 
                 const ratingTitle = document.createElement('div');
                 ratingTitle.className = 'mb-2 flex items-center justify-between text-xs text-slate-500';
@@ -278,10 +341,8 @@ class AssessmentJourney {
                     const isSelectedRating = currentRating === level.value;
                     const ratingBtn = document.createElement('button');
                     ratingBtn.type = 'button';
-                    ratingBtn.className = `rating-btn inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-all ${
-                        isSelectedRating
-                            ? 'bg-brand-600 text-white shadow-xs'
-                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    ratingBtn.className = `rating-btn inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
+                        isSelectedRating ? level.activeClass : level.idleClass
                     }`;
 
                     ratingBtn.innerHTML = `
@@ -313,13 +374,13 @@ class AssessmentJourney {
         this.noneFitCard.className = `relative flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-all ${
             currentAnswer.none_selected
                 ? 'border-brand-600 bg-brand-50/50 ring-1 ring-brand-600'
-                : 'border-slate-200 bg-white hover:bg-slate-50'
+                : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300'
         }`;
 
         this.cannotJudgeCard.className = `relative flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-all ${
             currentAnswer.unable_to_judge
                 ? 'border-brand-600 bg-brand-50/50 ring-1 ring-brand-600'
-                : 'border-slate-200 bg-white hover:bg-slate-50'
+                : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300'
         }`;
     }
 
@@ -333,13 +394,13 @@ class AssessmentJourney {
         this.cannotJudgeRadio.checked = false;
 
         this.renderCurrentQuestion();
-        this.saveCurrentAnswer();
+        this.scheduleSave();
     }
 
     handleSpecialChoice(choiceType) {
         const answer = this.getCurrentAnswer();
         answer.primary_option_id = null;
-        answer.ratings = {}; // Ratings are cleared for special exclusion choices
+        answer.ratings = {}; // Clear ratings for special choices
 
         if (choiceType === 'none_selected') {
             answer.none_selected = true;
@@ -352,7 +413,7 @@ class AssessmentJourney {
         }
 
         this.renderCurrentQuestion();
-        this.saveCurrentAnswer();
+        this.scheduleSave();
     }
 
     handleRatingClick(optionId, ratingValue, isAlreadySelected) {
@@ -362,7 +423,7 @@ class AssessmentJourney {
         if (isAlreadySelected) {
             delete answer.ratings[optionId];
             this.renderCurrentQuestion();
-            this.saveCurrentAnswer();
+            this.scheduleSave();
             return;
         }
 
@@ -373,10 +434,9 @@ class AssessmentJourney {
             return;
         }
 
-        // Normal rating assignment
         answer.ratings[optionId] = ratingValue;
         this.renderCurrentQuestion();
-        this.saveCurrentAnswer();
+        this.scheduleSave();
     }
 
     openConflictModal() {
@@ -393,23 +453,31 @@ class AssessmentJourney {
             const answer = this.getCurrentAnswer();
             answer.ratings[this.pendingConflict.optionId] = this.pendingConflict.ratingValue;
             this.renderCurrentQuestion();
-            this.saveCurrentAnswer();
+            this.scheduleSave();
         }
         this.closeConflictModal();
     }
 
-    async saveCurrentAnswer() {
+    scheduleSave() {
+        clearTimeout(this.debounceSaveTimer);
+        this.setSaveStatus('saving', 'جارٍ الحفظ…');
+        this.debounceSaveTimer = setTimeout(() => {
+            this.flushSave();
+        }, 350);
+    }
+
+    async flushSave() {
+        clearTimeout(this.debounceSaveTimer);
+
         const question = this.getCurrentQuestion();
         const answer = this.getCurrentAnswer();
         if (!question || !answer) return;
 
-        // Validate that one response state is selected
         const hasPrimary = answer.primary_option_id !== null;
         if (!hasPrimary && !answer.none_selected && !answer.unable_to_judge) {
-            return; // Not answered yet
+            return;
         }
 
-        // Prepare payload according to contract H-03
         const ratingsArray = [];
         if (!answer.unable_to_judge && answer.ratings) {
             for (const [optId, ratingVal] of Object.entries(answer.ratings)) {
@@ -431,6 +499,11 @@ class AssessmentJourney {
         this.hideError();
 
         try {
+            if (this.abortController) {
+                this.abortController.abort();
+            }
+            this.abortController = new AbortController();
+
             const url = `${this.saveBaseUrl}/${question.question_id}`;
             const response = await fetch(url, {
                 method: 'PUT',
@@ -440,6 +513,7 @@ class AssessmentJourney {
                     'X-CSRF-TOKEN': this.csrfToken,
                 },
                 body: JSON.stringify(payload),
+                signal: this.abortController.signal,
             });
 
             if (!response.ok) {
@@ -454,6 +528,7 @@ class AssessmentJourney {
             this.renderNavGrid();
             this.updateNavButtons();
         } catch (err) {
+            if (err.name === 'AbortError') return;
             this.setSaveStatus('error', 'تعذر حفظ الإجابة.');
             this.showError(err.message || 'تعذر حفظ الإجابة. حاول مرة أخرى.');
         }
@@ -464,13 +539,30 @@ class AssessmentJourney {
         this.saveStatusText.textContent = message;
 
         if (status === 'saving') {
-            this.saveStatusText.className = 'text-brand-600 font-semibold animate-pulse';
+            this.saveStatusText.className = 'text-brand-600 font-semibold';
+            this.saveStatusIcon.innerHTML = `
+                <svg class="h-3.5 w-3.5 animate-spin text-brand-600" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            `;
         } else if (status === 'saved') {
-            this.saveStatusText.className = 'text-green-600 font-semibold';
+            this.saveStatusText.className = 'text-emerald-600 font-semibold';
+            this.saveStatusIcon.innerHTML = `
+                <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+            `;
         } else if (status === 'error') {
             this.saveStatusText.className = 'text-red-600 font-semibold';
+            this.saveStatusIcon.innerHTML = `
+                <svg class="h-3.5 w-3.5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                </svg>
+            `;
         } else {
             this.saveStatusText.className = 'text-slate-400 font-medium';
+            this.saveStatusIcon.innerHTML = '';
         }
     }
 
@@ -511,16 +603,19 @@ class AssessmentJourney {
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.setAttribute('aria-label', `الموقف رقم ${q.position}`);
-            btn.className = `flex h-9 w-full items-center justify-center rounded-lg text-xs font-bold transition-all ${
+            btn.className = `flex h-9 w-full items-center justify-center rounded-xl text-xs font-bold transition-all ${
                 isCurrent
                     ? 'bg-brand-600 text-white ring-2 ring-brand-600 ring-offset-2 shadow-xs'
                     : isAnswered
-                    ? 'bg-green-100 text-green-900 border border-green-300 hover:bg-green-200'
+                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`;
 
             btn.textContent = q.position;
-            btn.addEventListener('click', () => this.goToIndex(idx));
+            btn.addEventListener('click', () => {
+                this.flushSave();
+                this.goToIndex(idx);
+            });
 
             this.questionsNavGrid.appendChild(btn);
         });
@@ -560,12 +655,14 @@ class AssessmentJourney {
     }
 
     goToNext() {
+        this.flushSave();
         if (this.currentIndex < this.questions.length - 1) {
             this.goToIndex(this.currentIndex + 1);
         }
     }
 
     goToPrevious() {
+        this.flushSave();
         if (this.currentIndex > 0) {
             this.goToIndex(this.currentIndex - 1);
         }

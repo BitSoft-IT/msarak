@@ -2,15 +2,18 @@
 
 namespace Tests\Feature;
 
+use App\Exceptions\SessionCompletedException;
 use App\Models\Answer;
 use App\Models\AssessmentSession;
 use App\Models\AssessmentVersion;
 use App\Models\Question;
 use App\Models\QuestionOption;
 use App\Models\Result;
+use App\Models\ResultRecommendation;
 use App\Models\User;
-use App\Services\RecommendationService;
+use App\Services\AssessmentSessionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use RuntimeException;
 use Tests\TestCase;
 
@@ -83,15 +86,47 @@ class AssessmentCompletionTest extends TestCase
     public function test_failure_during_recommendation_rolls_back_everything(): void
     {
         [$student, $session] = $this->makeCompleteSession(18);
-        $mock = $this->mock(RecommendationService::class);
-        $mock->shouldReceive('recommend')->once()->andThrow(new RuntimeException('forced failure'));
+        $eventName = 'eloquent.creating: '.ResultRecommendation::class;
+        Event::listen($eventName, static function (): never {
+            throw new RuntimeException('forced failure after result and scores are created');
+        });
 
-        $this->actingAs($student)
-            ->postJson(route('assessment.sessions.complete', $session))
-            ->assertStatus(500);
+        try {
+            $this->actingAs($student)
+                ->postJson(route('assessment.sessions.complete', $session))
+                ->assertStatus(500);
+        } finally {
+            Event::forget($eventName);
+        }
 
         $this->assertSame(0, Result::count());
+        $this->assertDatabaseCount('result_scores', 0);
+        $this->assertDatabaseCount('result_recommendations', 0);
         $this->assertDatabaseHas('assessment_sessions', ['id' => $session->id, 'status' => 'in_progress']);
+    }
+
+    public function test_a_stale_session_model_cannot_save_after_completion(): void
+    {
+        [, $staleSession] = $this->makeCompleteSession(18);
+        $answer = $staleSession->answers()->with('question.questionOptions')->firstOrFail();
+
+        AssessmentSession::query()->whereKey($staleSession->id)->update([
+            'status' => 'completed',
+            'completed_at' => now(),
+        ]);
+
+        $this->expectException(SessionCompletedException::class);
+
+        app(AssessmentSessionService::class)->saveAnswer(
+            $staleSession,
+            $answer->question,
+            [
+                'primary_option_id' => null,
+                'none_selected' => true,
+                'unable_to_judge' => false,
+                'ratings' => [],
+            ]
+        );
     }
 
     /** @return array{User, AssessmentSession} */

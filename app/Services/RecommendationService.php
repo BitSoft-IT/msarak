@@ -4,15 +4,6 @@ namespace App\Services;
 
 class RecommendationService
 {
-    /**
-     * The current catalog provides an ordered three-code profile rather than
-     * six numeric values. These weights preserve that approved ordering while
-     * producing the six-dimensional vector required by cosine similarity.
-     */
-    private const PRIMARY_PROFILE_WEIGHT = 1.0;
-
-    private const SECONDARY_PROFILE_WEIGHT = 0.5;
-
     public function __construct(
         protected SpecializationCatalogService $catalogService
     ) {}
@@ -27,14 +18,7 @@ class RecommendationService
         $recommendations = [];
 
         foreach ($this->catalogService->all() as $specialization) {
-            $profile = array_fill_keys(ScoringService::RIASEC_CODES, 0.0);
-            $profile[$specialization['riasec_primary']] = self::PRIMARY_PROFILE_WEIGHT;
-
-            foreach ($specialization['riasec_secondary'] as $code) {
-                $profile[$code] = self::SECONDARY_PROFILE_WEIGHT;
-            }
-
-            $similarity = $this->cosineSimilarity($scores, $profile);
+            $similarity = $this->cosineSimilarity($scores, $specialization['riasec_profile']);
             $secondary = implode(' و', $specialization['riasec_secondary']);
 
             $recommendations[] = [

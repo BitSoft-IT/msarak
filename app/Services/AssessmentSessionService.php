@@ -140,14 +140,6 @@ class AssessmentSessionService
      */
     public function saveAnswer(AssessmentSession $session, Question $question, array $data): array
     {
-        if ($session->status === 'completed') {
-            throw new SessionCompletedException();
-        }
-
-        if ($question->assessment_version_id !== $session->assessment_version_id) {
-            throw new AnswerInvalidException('السؤال لا ينتمي إلى إصدار جلسة التقييم.');
-        }
-
         $noneSelected = filter_var($data['none_selected'] ?? false, FILTER_VALIDATE_BOOLEAN);
         $unableToJudge = filter_var($data['unable_to_judge'] ?? false, FILTER_VALIDATE_BOOLEAN);
         $primaryOptionId = $data['primary_option_id'] ?? null;
@@ -169,6 +161,21 @@ class AssessmentSessionService
         }
 
         return DB::transaction(function () use ($session, $question, $responseType, $primaryOptionId, $ratings): array {
+            // The route-bound model may be stale. Locking the persisted row
+            // serializes saves with completion and concurrent first saves.
+            $lockedSession = AssessmentSession::query()
+                ->whereKey($session->getKey())
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if ($lockedSession->status === 'completed') {
+                throw new SessionCompletedException;
+            }
+
+            if ($question->assessment_version_id !== $lockedSession->assessment_version_id) {
+                throw new AnswerInvalidException('السؤال لا ينتمي إلى إصدار جلسة التقييم.');
+            }
+
             $answer = Answer::where('assessment_session_id', $session->id)
                 ->where('question_id', $question->id)
                 ->first();
@@ -210,8 +217,8 @@ class AssessmentSessionService
                 AnswerOptionRating::insert($ratingRows);
             }
 
-            $processed = $session->answers()->count();
-            $total = $session->assessmentVersion->questions()->count();
+            $processed = $lockedSession->answers()->count();
+            $total = $lockedSession->assessmentVersion->questions()->count();
 
             return [
                 'question_id' => $question->id,

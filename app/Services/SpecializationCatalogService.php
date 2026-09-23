@@ -86,4 +86,15 @@ class SpecializationCatalogService
 
         return (string) $versions[0];
     }
+
+    public function find(string $id): ?array
+    {
+        foreach ($this->all() as $specialization) {
+            if ($specialization['id'] === $id) {
+                return $specialization;
+            }
+        }
+
+    return null;
+    }
 }

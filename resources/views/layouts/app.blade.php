@@ -27,6 +27,11 @@
                            class="inline-flex min-h-11 items-center px-1 font-medium hover:text-brand-700"
                            @if (request()->is('/')) aria-current="page" @endif>الرئيسية</a>
                     </li>
+                    <li>
+                        <a href="{{ route('specializations.index') }}"
+                           class="inline-flex min-h-11 items-center px-1 font-medium hover:text-brand-700"
+                           @if (request()->routeIs('specializations.*')) aria-current="page" @endif>التخصصات</a>
+                    </li>
                     @auth
                         @if (auth()->user()->role === 'student')
                             <li>

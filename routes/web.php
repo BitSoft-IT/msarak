@@ -14,9 +14,12 @@ Route::middleware(['auth', 'role:student'])->group(function (): void {
 
     Route::get('/results/{result}', [ResultController::class, 'show'])
         ->name('results.show');
-        
+
     Route::get('/profile', [ProfileController::class, 'show'])
         ->name('profile.show');
+
+    Route::get('/assessment', [AssessmentSessionController::class, 'intro'])
+        ->name('assessment.intro');
 
     Route::post('/assessment/sessions', [AssessmentSessionController::class, 'store'])
         ->name('assessment.sessions.store');

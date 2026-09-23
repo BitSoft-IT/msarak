@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@hasSection('title')@yield('title') | @endifمسارك</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -20,6 +21,15 @@
                            class="inline-flex min-h-11 items-center px-1 font-medium hover:text-brand-700"
                            @if (request()->is('/')) aria-current="page" @endif>الرئيسية</a>
                     </li>
+                    @auth
+                        @if (auth()->user()->role === 'student')
+                            <li>
+                                <a href="{{ route('assessment.intro') }}"
+                                   class="inline-flex min-h-11 items-center px-1 font-medium hover:text-brand-700"
+                                   @if (request()->routeIs('assessment.*')) aria-current="page" @endif>استكشاف ميولك</a>
+                            </li>
+                        @endif
+                    @endauth
                     {{-- روابط الصفحات اللاحقة تضاف هنا --}}
                 </ul>
             </nav>

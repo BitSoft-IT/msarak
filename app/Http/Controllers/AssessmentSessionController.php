@@ -6,7 +6,9 @@ use App\Exceptions\ResourceNotFoundException;
 use App\Models\AssessmentSession;
 use App\Services\AssessmentCompletionService;
 use App\Services\AssessmentSessionService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -18,9 +20,25 @@ class AssessmentSessionController extends Controller
     ) {}
 
     /**
+     * Display the assessment introduction and active session status.
+     */
+    public function intro(Request $request): View
+    {
+        $user = $request->user();
+        $activeSession = AssessmentSession::where('user_id', $user->id)
+            ->where('status', 'in_progress')
+            ->latest('id')
+            ->first();
+
+        return view('assessment.intro', [
+            'activeSession' => $activeSession,
+        ]);
+    }
+
+    /**
      * Start a new assessment session or resume an existing in-progress one.
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): JsonResponse|RedirectResponse
     {
         $result = $this->sessionService->startOrResumeSession($request->user());
         $session = $result['session'];
@@ -28,6 +46,10 @@ class AssessmentSessionController extends Controller
 
         $statusCode = $resumed ? 200 : 201;
         $message = $resumed ? 'تم استئناف التقييم.' : 'بدأ التقييم.';
+
+        if (! $request->expectsJson()) {
+            return redirect("/assessment/sessions/{$session->id}");
+        }
 
         return response()->json([
             'data' => [
@@ -44,18 +66,25 @@ class AssessmentSessionController extends Controller
     /**
      * Display the assessment session and resume state.
      */
-    public function show(Request $request, AssessmentSession $assessmentSession): JsonResponse
+    public function show(Request $request, AssessmentSession $assessmentSession): JsonResponse|View
     {
         if (Gate::denies('view', $assessmentSession)) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException;
         }
 
         $data = $this->sessionService->getSessionState($assessmentSession);
 
-        return response()->json([
-            'data' => $data,
-            'message' => 'تم تحميل جلسة التقييم.',
-        ], 200);
+        if ($request->expectsJson()) {
+            return response()->json([
+                'data' => $data,
+                'message' => 'تم تحميل جلسة التقييم.',
+            ], 200);
+        }
+
+        return view('assessment.show', [
+            'session' => $assessmentSession,
+            'initialData' => $data,
+        ]);
     }
 
     /**
@@ -64,7 +93,7 @@ class AssessmentSessionController extends Controller
     public function complete(Request $request, AssessmentSession $assessmentSession): JsonResponse
     {
         if (Gate::denies('update', $assessmentSession)) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException;
         }
 
         $result = $this->completionService->complete($assessmentSession);

@@ -164,8 +164,8 @@ class H04ProfileResultSecurityTest extends TestCase
         $response = $this->actingAs($student)
             ->getJson(
                 route('profile.results.index')
-                . '?user_id='
-                . $otherStudent->id
+                .'?user_id='
+                .$otherStudent->id
             );
 
         $response->assertStatus(200);

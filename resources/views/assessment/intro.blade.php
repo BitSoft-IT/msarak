@@ -3,140 +3,271 @@
 @section('title', 'استكشاف ميولك')
 
 @section('content')
-<div class="mx-auto max-w-3xl">
-    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10 transition-shadow hover:shadow-md">
-        {{-- رأس الصفحة --}}
-        <header class="mb-8 border-b border-slate-100 pb-6 text-center">
-            <span class="mb-3 inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3.5 py-1 text-xs font-bold text-brand-700">
-                <svg class="h-3.5 w-3.5 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-                رحلة التقييم الأكاديمي والمهني
-            </span>
-            <h1 class="text-3xl font-extrabold text-slate-900 sm:text-4xl tracking-tight">استكشاف ميولك</h1>
-            <p class="mt-4 text-base leading-relaxed text-slate-700 sm:text-lg">
+<div class="mx-auto max-w-4xl space-y-8">
+
+    {{-- 1. Hero Card: الهوية البصرية الرئيسية للتقييم --}}
+    <section class="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-brand-50/20 to-indigo-50/30 p-6 sm:p-10 lg:p-12 shadow-sm transition-all hover:shadow-md">
+        {{-- تأثيرات ضوئية خلفية ناعمة --}}
+        <div class="pointer-events-none absolute -end-24 -top-24 h-80 w-80 rounded-full bg-brand-500/10 blur-3xl" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute -start-20 bottom-0 h-60 w-60 rounded-full bg-indigo-500/10 blur-2xl" aria-hidden="true"></div>
+
+        <div class="relative z-10 text-center max-w-2xl mx-auto">
+            {{-- شارة المقدمة مع نقطة حية نابضة --}}
+            <div class="inline-flex items-center gap-2 rounded-full border border-brand-200/80 bg-white/90 px-4 py-1.5 text-xs font-bold text-brand-700 shadow-xs backdrop-blur-xs">
+                <span class="flex h-2 w-2 rounded-full bg-brand-600 animate-pulse" aria-hidden="true"></span>
+                <span>رحلة التوجيه الأكاديمي والمهني</span>
+            </div>
+
+            <h1 class="mt-5 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+                استكشاف ميولك
+            </h1>
+
+            <p class="mt-4 text-base font-medium leading-relaxed text-slate-700 sm:text-lg">
                 يساعدك هذا التقييم على استكشاف الأنشطة والمجالات التي قد تستمتع بها أو ترغب في التعرف إليها أكثر.
             </p>
+
             <p class="mt-2 text-sm leading-relaxed text-slate-500">
                 التقييم أداة استكشافية وإرشادية، وليس اختبارًا للقدرات أو تشخيصًا للشخصية، ولا يحدد تخصصًا أو مهنة واحدة مناسبة لك بشكل نهائي.
             </p>
-        </header>
 
-        {{-- تنبيه استئناف الجلسة إن وجدت --}}
-        @if ($activeSession)
-            <div class="mb-8 rounded-xl border-s-4 border-brand-600 bg-brand-50/80 p-4 text-slate-800 shadow-xs" role="alert">
-                <div class="flex items-start gap-3">
-                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-white">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.516 0c.85.493 1.508 1.333 1.508 2.316V18" />
+            {{-- شريط ميزات التقييم السريع --}}
+            <div class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 text-start">
+                <div class="rounded-2xl border border-slate-200/80 bg-white/80 p-3.5 backdrop-blur-xs shadow-2xs">
+                    <div class="flex items-center gap-2 text-brand-600 mb-1">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        <span class="text-xs font-bold text-slate-700">المدة</span>
+                    </div>
+                    <span class="text-xs text-slate-500">10 – 15 دقيقة</span>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200/80 bg-white/80 p-3.5 backdrop-blur-xs shadow-2xs">
+                    <div class="flex items-center gap-2 text-brand-600 mb-1">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+                        </svg>
+                        <span class="text-xs font-bold text-slate-700">المواقف</span>
+                    </div>
+                    <span class="text-xs text-slate-500">18 موقفًا واقعيًا</span>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200/80 bg-white/80 p-3.5 backdrop-blur-xs shadow-2xs">
+                    <div class="flex items-center gap-2 text-brand-600 mb-1">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        <span class="text-xs font-bold text-slate-700">الحفظ</span>
+                    </div>
+                    <span class="text-xs text-slate-500">فوري وتلقائي</span>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200/80 bg-white/80 p-3.5 backdrop-blur-xs shadow-2xs">
+                    <div class="flex items-center gap-2 text-brand-600 mb-1">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        <span class="text-xs font-bold text-slate-700">النتيجة</span>
+                    </div>
+                    <span class="text-xs text-slate-500">توصيات موجهة</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 2. تنبيه استئناف الجلسة إن وُجدت بتصميم بارز جذاب --}}
+    @if ($activeSession)
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-600 to-indigo-700 p-6 sm:p-8 text-white shadow-lg shadow-brand-600/15" role="alert">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+                <div class="flex items-start gap-4">
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-xs">
+                        <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
                     </div>
                     <div>
-                        <h2 class="font-bold text-brand-700">لديك تقييم غير مكتمل</h2>
-                        <p class="mt-1 text-sm leading-relaxed text-slate-700">
+                        <h2 class="text-xl font-bold tracking-tight text-white">لديك تقييم غير مكتمل</h2>
+                        <p class="mt-1 text-sm text-brand-100 leading-relaxed">
                             لديك تقييم غير مكتمل. تم حفظ تقدمك، ويمكنك المتابعة من حيث توقفت.
                         </p>
                     </div>
                 </div>
+
+                <form method="POST" action="{{ route('assessment.sessions.store') }}" class="shrink-0">
+                    @csrf
+                    <button type="submit" class="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-bold text-brand-700 shadow-md hover:bg-brand-50 transition-all">
+                        <span>متابعة التقييم</span>
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                        </svg>
+                    </button>
+                </form>
             </div>
-        @endif
+        </div>
+    @endif
 
-        {{-- إرشادات التقييم المعتمدة --}}
-        <section aria-labelledby="instructions-heading" class="space-y-6 text-slate-800">
-            <h2 id="instructions-heading" class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                <svg class="h-5 w-5 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                </svg>
-                طريقة الإجابة
-            </h2>
+    {{-- 3. دليل رحلة الإجابة ونموذج الاستجابة المعتمد --}}
+    <section aria-labelledby="guide-heading" class="rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm space-y-8">
+        <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-600">إرشادات المشاركة</span>
+            <h2 id="guide-heading" class="mt-1 text-2xl font-bold text-slate-900">طريقة الإجابة</h2>
+        </div>
 
-            <div class="rounded-xl border border-slate-200/80 bg-slate-50/70 p-4 sm:p-5">
-                <p class="font-medium leading-relaxed text-slate-900">
-                    في كل موقف، اقرأ التصرفات المعروضة واختر تصرفًا واحدًا فقط يمثل ما يشبهك أكثر.
-                </p>
-                <p class="mt-2 text-sm leading-relaxed text-slate-600">
-                    لا توجد إجابة صحيحة أو خاطئة. اختر التصرف الذي يمثل طريقة تعاملك المعتادة، وليس التصرف الذي تظن أنه الأفضل أو الذي يتوقعه الآخرون منك.
-                </p>
-            </div>
-
-            <div class="grid gap-4 sm:grid-cols-2">
-                <div class="rounded-xl border border-slate-200 p-4 transition-colors hover:border-slate-300">
-                    <div class="flex items-center gap-2">
-                        <span class="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 text-slate-700">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
-                            </svg>
-                        </span>
-                        <h3 class="font-bold text-slate-900 text-sm">خيار عدم تمثيل أي تصرف</h3>
-                    </div>
-                    <p class="mt-2.5 text-xs leading-relaxed text-slate-600">
-                        إذا فهمت الموقف، لكن لم يشبهك أي من التصرفات الأربعة، اختر:
+        {{-- المبدأ الأساسي --}}
+        <div class="rounded-2xl border border-brand-100 bg-brand-50/40 p-5 sm:p-6">
+            <div class="flex items-start gap-3.5">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white font-bold text-sm shadow-xs">1</span>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">اختر تصرفًا واحدًا يشبهك أكثر</h3>
+                    <p class="mt-1.5 text-sm leading-relaxed text-slate-700">
+                        في كل موقف، اقرأ التصرفات المعروضة واختر تصرفًا واحدًا فقط يمثل ما يشبهك أكثر.
                     </p>
-                    <span class="mt-3 inline-block rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-800 border border-slate-200">
-                        لا يشبهني أي من هذه التصرفات
+                    <p class="mt-2 text-xs font-medium text-brand-800 bg-brand-100/60 inline-block px-3 py-1 rounded-lg">
+                        لا توجد إجابة صحيحة أو خاطئة. اختر التصرف الذي يمثل طريقة تعاملك المعتادة، وليس التصرف الذي تظن أنه الأفضل أو الذي يتوقعه الآخرون منك.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {{-- السلم الخماسي الاختياري --}}
+        <div class="rounded-2xl border border-slate-200/90 bg-slate-50/50 p-5 sm:p-6 space-y-4">
+            <div class="flex items-start gap-3.5">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-white font-bold text-sm shadow-xs">2</span>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">التقييم الإضافي (اختياري)</h3>
+                    <p class="mt-1.5 text-sm leading-relaxed text-slate-600">
+                        بعد اختيار التصرف الأساسي، يمكنك اختياريًا تقييم أي عدد من التصرفات السلوكية الأربعة باستخدام السلم من -2 إلى +2. لا يلزمك تقييمها كلها، ويمكنك ترك بعضها دون تقييم.
+                    </p>
+                </div>
+            </div>
+
+            {{-- معاينة بصرية حية لمستويات السلم الخماسي المعتمدة --}}
+            <div class="mt-3 ps-12">
+                <span class="text-xs font-semibold text-slate-500 block mb-2">مستويات التقييم المعتمدة مع الرموز التعبيرية:</span>
+                <div class="flex flex-wrap gap-2">
+                    <span class="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-800 shadow-2xs">
+                        <span aria-hidden="true">😊</span>
+                        <span>يشبهني جدًا</span>
+                        <span class="text-[10px] text-emerald-600 bg-white/70 px-1.5 py-0.5 rounded-md font-mono">(+2)</span>
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 rounded-xl border border-teal-200 bg-teal-50 px-3 py-1.5 text-xs font-bold text-teal-800 shadow-2xs">
+                        <span aria-hidden="true">🙂</span>
+                        <span>يشبهني</span>
+                        <span class="text-[10px] text-teal-600 bg-white/70 px-1.5 py-0.5 rounded-md font-mono">(+1)</span>
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-700 shadow-2xs">
+                        <span aria-hidden="true">😐</span>
+                        <span>محايد / غير متأكد</span>
+                        <span class="text-[10px] text-slate-500 bg-white/70 px-1.5 py-0.5 rounded-md font-mono">(0)</span>
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-800 shadow-2xs">
+                        <span aria-hidden="true">🙁</span>
+                        <span>لا يشبهني</span>
+                        <span class="text-[10px] text-amber-600 bg-white/70 px-1.5 py-0.5 rounded-md font-mono">(-1)</span>
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-800 shadow-2xs">
+                        <span aria-hidden="true">😞</span>
+                        <span>لا يشبهني إطلاقًا</span>
+                        <span class="text-[10px] text-rose-600 bg-white/70 px-1.5 py-0.5 rounded-md font-mono">(-2)</span>
                     </span>
                 </div>
+            </div>
+        </div>
 
-                <div class="rounded-xl border border-slate-200 p-4 transition-colors hover:border-slate-300">
-                    <div class="flex items-center gap-2">
-                        <span class="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 text-slate-700">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                            </svg>
-                        </span>
-                        <h3 class="font-bold text-slate-900 text-sm">خيار عدم القدرة على الحكم</h3>
+        {{-- الخيارات الخاصة عند تعذر المطابقة --}}
+        <div class="space-y-4">
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-white font-bold text-sm shadow-xs">3</span>
+                خيارات بديلة عند تعذر مطابقة أي من التصرفات
+            </h3>
+
+            <div class="grid gap-4 sm:grid-cols-2 ps-12">
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs transition-all hover:border-slate-300">
+                    <span class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-800 mb-2">
+                        <svg class="h-3.5 w-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                        خيار عدم تمثيل أي تصرف
+                    </span>
+                    <p class="text-xs leading-relaxed text-slate-600">
+                        إذا فهمت الموقف، لكن لم يشبهك أي من التصرفات الأربعة، اختر:
+                    </p>
+                    <div class="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-slate-900 text-center">
+                        لا يشبهني أي من هذه التصرفات
                     </div>
-                    <p class="mt-2.5 text-xs leading-relaxed text-slate-600">
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs transition-all hover:border-slate-300">
+                    <span class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-800 mb-2">
+                        <svg class="h-3.5 w-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                        </svg>
+                        خيار عدم القدرة على الحكم
+                    </span>
+                    <p class="text-xs leading-relaxed text-slate-600">
                         إذا لم تستطع فهم الموقف أو لم تملك معلومات كافية لتكوين إجابة موثوقة، اختر:
                     </p>
-                    <span class="mt-3 inline-block rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-800 border border-slate-200">
+                    <div class="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-slate-900 text-center">
                         لا أستطيع الحكم على هذا الموقف
-                    </span>
-                    <p class="mt-2 text-[11px] text-slate-500">
+                    </div>
+                    <p class="mt-2 text-[11px] text-slate-500 text-center">
                         استخدم هذا الخيار عندما يتعذر عليك الحكم فعلًا، وليس لمجرد التردد العادي بين التصرفات.
                     </p>
                 </div>
             </div>
+        </div>
 
-            <div class="rounded-xl border border-slate-200 p-4 sm:p-5">
-                <div class="flex items-center gap-2">
-                    <span class="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 text-slate-700">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-                        </svg>
-                    </span>
-                    <h3 class="font-bold text-slate-900 text-sm">التقييم الإضافي (اختياري)</h3>
-                </div>
-                <p class="mt-2 text-sm leading-relaxed text-slate-600">
-                    بعد اختيار التصرف الأساسي، يمكنك اختياريًا تقييم أي عدد من التصرفات السلوكية الأربعة باستخدام السلم من -2 إلى +2. لا يلزمك تقييمها كلها، ويمكنك ترك بعضها دون تقييم.
-                </p>
-            </div>
-
-            <div class="rounded-xl border border-amber-200 bg-amber-50/70 p-4 text-amber-950">
-                <div class="flex items-start gap-2.5">
-                    <svg class="h-5 w-5 text-amber-700 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        {{-- تنبيه الملاحظة الذهبية قبل البدء --}}
+        <div class="rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50/80 to-amber-100/40 p-5 text-amber-950">
+            <div class="flex items-start gap-3">
+                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-200 text-amber-800">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                     </svg>
-                    <p class="text-sm font-medium leading-relaxed">
-                        <strong>ملاحظة:</strong> أجب وفق ما يشبهك أنت، ولا تحاول اختيار الإجابة التي تبدو أفضل أو أكثر قبولًا. خذ وقتك واقرأ كل موقف بهدوء.
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-amber-900">ملاحظة قبل البدء</h4>
+                    <p class="mt-1 text-sm font-medium leading-relaxed text-amber-900">
+                        أجب وفق ما يشبهك أنت، ولا تحاول اختيار الإجابة التي تبدو أفضل أو أكثر قبولًا. خذ وقتك واقرأ كل موقف بهدوء.
                     </p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        {{-- زر البدء / الاستئناف --}}
-        <footer class="mt-10 border-t border-slate-100 pt-6 text-center">
+    {{-- 4. إجراء البدء الرئيسي (Primary Action CTA) --}}
+    <footer class="rounded-3xl border border-slate-200 bg-white p-8 sm:p-10 shadow-sm text-center">
+        <h2 class="text-xl font-bold text-slate-900 sm:text-2xl">
+            @if ($activeSession)
+                هل أنت مستعد لمتابعة رحلتك؟
+            @else
+                جاهز لبدء استكشاف ميولك؟
+            @endif
+        </h2>
+        <p class="mt-2 text-sm text-slate-500 max-w-md mx-auto">
+            تذكر أن إجاباتك تُحفظ تلقائياً، ويمكنك العودة أو مراجعة أي موقف في أي وقت.
+        </p>
+
+        <div class="mt-6">
             <form method="POST" action="{{ route('assessment.sessions.store') }}" class="inline-block">
                 @csrf
-                <button type="submit" class="btn btn-primary min-w-56 text-base font-bold py-3.5 px-8 shadow-md shadow-brand-600/25 transition-all hover:shadow-lg hover:shadow-brand-600/30">
-                    @if ($activeSession)
-                        متابعة التقييم
-                    @else
-                        بدء التقييم
-                    @endif
+                <button type="submit" class="btn btn-primary min-w-64 text-base font-bold py-4 px-10 rounded-2xl shadow-lg shadow-brand-600/30 transition-all hover:shadow-xl hover:shadow-brand-600/40 hover:-translate-y-0.5 active:translate-y-0">
+                    <span class="flex items-center justify-center gap-2.5">
+                        <span>
+                            @if ($activeSession)
+                                متابعة التقييم
+                            @else
+                                بدء التقييم
+                            @endif
+                        </span>
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                        </svg>
+                    </span>
                 </button>
             </form>
-        </footer>
-    </div>
+        </div>
+    </footer>
+
 </div>
 @endsection

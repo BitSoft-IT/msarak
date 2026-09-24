@@ -5,7 +5,18 @@
 @section('content')
     <div class="auth-shell">
         <section aria-labelledby="reset-title" class="auth-card">
-            <h1 id="reset-title" class="text-2xl font-bold">تعيين كلمة مرور جديدة</h1>
+            {{-- علامة الهوية على الجوال (اللوحة الجانبية مخفية تحت lg) --}}
+            <div class="mb-5 flex items-center gap-2 lg:hidden" aria-hidden="true">
+                <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-sm font-extrabold text-white shadow-sm shadow-brand-600/30">م</span>
+                <span class="text-lg font-bold text-brand-700">مسارك</span>
+            </div>
+
+            <div class="auth-head">
+                <span class="auth-head-icon">
+                    <x-ui.icon name="lock" class="h-5 w-5" />
+                </span>
+                <h1 id="reset-title" class="text-2xl font-bold">تعيين كلمة مرور جديدة</h1>
+            </div>
 
             <form method="POST" action="{{ route('password.store') }}" class="auth-form mt-6 space-y-4">
                 @csrf
@@ -21,7 +32,7 @@
                         @error('email') aria-invalid="true" aria-describedby="email-error" @enderror
                     >
                     @error('email')
-                        <p id="email-error" class="mt-1 text-sm text-red-700">{{ $message }}</p>
+                        <p id="email-error" class="mt-1 text-sm text-danger-700">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -46,7 +57,7 @@
 </button>
                     </div>
                     @error('password')
-                        <p id="password-error" class="mt-1 text-sm text-red-700">{{ $message }}</p>
+                        <p id="password-error" class="mt-1 text-sm text-danger-700">{{ $message }}</p>
                     @enderror
                 </div>
 

@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './fonts.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -8,39 +9,105 @@
 @theme {
     --font-sans: 'IBM Plex Sans Arabic', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-    /* لون مؤقت محايد؛ تُحدَّث القيم هنا فقط عند اعتماد الهوية */
+    /* الهوية البصرية (UX-01 §5) — باليت brand/Acccent ودلالات success/warning/danger */
     --color-brand-50: #eef2ff;
+    --color-brand-100: #e0e7ff;
+    --color-brand-200: #c7d2fe;
+    --color-brand-300: #a5b4fc;
+    --color-brand-400: #818cf8;
+    --color-brand-500: #6366f1;
     --color-brand-600: #4f46e5;
     --color-brand-700: #4338ca;
+    --color-brand-800: #3730a3;
+    --color-brand-900: #312e81;
+
+    --color-accent-50: #fff8eb;
+    --color-accent-100: #ffefc7;
+    --color-accent-500: #f5a524;
+    --color-accent-600: #d97f06;
+
+    --color-success-50: #f0fdf4;
+    --color-success-300: #86efac;
+    --color-success-700: #15803d;
+    --color-success-800: #166534;
+
+    --color-warning-50: #fffbeb;
+    --color-warning-300: #fcd34d;
+    --color-warning-700: #b45309;
+
+    --color-danger-50: #fef2f2;
+    --color-danger-300: #fca5a5;
+    --color-danger-600: #dc2626;
+    --color-danger-700: #b91c1c;
+
+    --radius-card: 1rem;
+    --shadow-card: 0 1px 2px rgb(15 23 42 / 0.06), 0 4px 16px rgb(15 23 42 / 0.06);
+    --shadow-pop: 0 8px 30px rgb(15 23 42 / 0.14);
 }
 
 @layer base {
-    html, body {
-        font-family: var(--font-sans);
+    html {
+        -webkit-text-size-adjust: 100%;
+        scroll-padding-top: 5rem;
+    }
+
+    body {
+        @apply font-sans bg-slate-50 text-slate-800 leading-relaxed antialiased;
     }
 
     :focus-visible {
         @apply outline-2 outline-offset-2 outline-brand-600;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
     }
 }
 
 @layer components {
     .container-page { @apply mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8; }
 
-    .btn { @apply inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-2 text-base font-semibold transition-colors; }
-    .btn-primary { @apply bg-brand-600 text-white hover:bg-brand-700; }
-    .btn-secondary { @apply border border-slate-300 bg-white text-slate-900 hover:bg-slate-100; }
+    .btn { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0; }
+    .btn-primary { @apply bg-brand-600 text-white shadow-sm shadow-brand-600/25 hover:bg-brand-700 hover:shadow-md hover:shadow-brand-600/30; }
+    .btn-secondary { @apply border border-slate-300 bg-white text-slate-900 hover:border-slate-400 hover:bg-slate-100 hover:shadow-sm; }
+    .btn-success { @apply bg-success-700 text-white shadow-sm shadow-success-700/25 hover:bg-success-800 hover:shadow-md hover:shadow-success-700/30; }
+    .btn-soft { @apply bg-brand-50 text-brand-700 hover:bg-brand-100; }
+    .btn-pill { @apply rounded-full px-5 py-2; }
 
-    .field-label { @apply mb-1 block text-sm font-semibold; }
-    .field-input { @apply block min-h-11 w-full rounded-lg border border-slate-400 bg-white px-3 py-2; }
+    .field-label { @apply mb-1 block text-sm font-semibold text-slate-800; }
+    .field-input { @apply block min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-base text-slate-900 transition-colors focus:border-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-600/15; }
+    .field-input:focus-visible { outline: none; }
+    .field-input[aria-invalid='true'] { @apply border-danger-600 bg-danger-50/50; }
+    .field-input[aria-invalid='true']:focus { @apply border-danger-600 ring-danger-600/15; }
+
+    .card-surface { @apply rounded-card border border-slate-200/80 bg-white p-6 shadow-card; }
+    .card-lift { @apply transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-pop; }
 
     .alert { @apply rounded-lg border-s-4 p-4 text-base; }
-    .alert-success { @apply border-green-700 bg-green-50 text-green-900; }
-    .alert-error { @apply border-red-700 bg-red-50 text-red-900; }
+    .alert-success { @apply border-success-300 bg-success-50 text-success-700; }
+    .alert-error { @apply border-danger-300 bg-danger-50 text-danger-700; }
 
     .ltr-text { direction: ltr; unicode-bidi: isolate; text-align: start; }
 
     .skip-link { @apply sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:shadow; }
+
+    .nav-link[aria-current='page'] { @apply bg-brand-50 text-brand-700; }
+
+    /* خط فاصل لعمود اللاصق في جدول المقارنة أثناء السحب الأفقي */
+    .table-sticky-edge::after {
+        content: '';
+        position: absolute;
+        inset-block: 0;
+        inset-inline-end: 0;
+        width: 1px;
+        background: var(--color-slate-200);
+        pointer-events: none;
+    }
 
 
     .auth-shell {
@@ -48,34 +115,43 @@
     }
 
     .auth-card {
-        @apply w-full max-w-md justify-self-center rounded-2xl border border-slate-200 bg-white p-6 shadow-lg shadow-slate-900/5 sm:p-8;
+        @apply w-full max-w-md justify-self-center rounded-card border border-slate-200/80 bg-white p-6 shadow-card sm:p-8;
+    }
+
+    .auth-head {
+        @apply flex items-center gap-3;
+    }
+
+    .auth-head-icon {
+        @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-sm shadow-brand-600/30;
     }
 
     .auth-panel {
-        @apply relative hidden overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 to-brand-700 p-10 text-white lg:flex lg:flex-col lg:justify-center;
+        @apply relative hidden overflow-hidden rounded-card bg-gradient-to-br from-brand-700 via-brand-600 to-brand-800 p-10 text-white lg:flex lg:flex-col lg:justify-center;
+        background-image: radial-gradient(circle at 18% 22%, rgb(255 255 255 / 0.10) 0 2px, transparent 3px), radial-gradient(circle at 42% 68%, rgb(255 255 255 / 0.08) 0 2px, transparent 3px), radial-gradient(circle at 76% 34%, rgb(255 255 255 / 0.08) 0 2px, transparent 3px), linear-gradient(to bottom left, var(--color-brand-700), var(--color-brand-600), var(--color-brand-800));
     }
 
     .field-wrap { @apply relative; }
 
     .field-toggle {
-        @apply absolute inset-y-0 start-0 flex items-center px-3 text-slate-500 hover:text-slate-800;
+        @apply absolute inset-y-0 start-0 flex w-11 items-center justify-center rounded-s-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800;
     }
 
-    .field-input-with-toggle { @apply ps-10; }
+    .field-input-with-toggle { @apply ps-12; }
 
 
     .auth-panel::before {
         content: '';
-        @apply absolute -end-16 -top-16 h-64 w-64 rounded-full bg-white/10;
+        @apply absolute -end-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-2xl;
     }
 
     .auth-panel::after {
         content: '';
-        @apply absolute -start-10 bottom-0 h-40 w-40 rounded-full bg-white/10;
+        @apply absolute -start-10 bottom-0 h-40 w-40 rounded-full bg-accent-500/20 blur-2xl;
     }
 
     .auth-panel-icon {
-        @apply mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15;
+        @apply mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/25 backdrop-blur-xs;
     }
 }
 
@@ -95,5 +171,17 @@
 
     .rating-btn {
         transition: all 0.15s ease-in-out;
+    }
+
+    /* رسم الأيقونة عند المرور على البطاقة (UX-01 §7.7) */
+    .spec-draw path { stroke-dasharray: 100; }
+
+    .group:hover .spec-draw path {
+        animation: spec-draw 0.9s ease-out;
+    }
+
+    @keyframes spec-draw {
+        from { stroke-dashoffset: 100; }
+        to   { stroke-dashoffset: 0; }
     }
 }

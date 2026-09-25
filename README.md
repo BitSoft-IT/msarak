@@ -102,6 +102,13 @@
 
 > تُستكمل الأرقام الجامعية وأسماء GitHub قبل التسليم النهائي.
 
+## المراجعة التقنية الخارجية
+
+| الاسم | الدور | GitHub Username |
+|---|---|---|
+| طارق العماري | External Technical Reviewer | [@tareq-alomari](https://github.com/tareq-alomari) |
+
+> يقوم المراجع التقني الخارجي بمراجعة الأعمال المنجزة والقرارات التقنية وPull Requests الرئيسية  وتقديم ملاحظات فنية على جودة التنفيذ واتساقه， 
 ---
 
 # التقنيات المتوقعة والمعتمدة
@@ -674,8 +681,8 @@ Secrets
 
 ### قيد التنفيذ
 
-- [ ] إكمال `Batch 1 — Foundation`.
-- [ ] تنفيذ `Batch 2 — Core Setup`.
+- [x] إكمال `Batch 1 — Foundation`.
+- [x] تنفيذ `Batch 2 — Core Setup`.
 - [ ] تنفيذ `Batch 3 — Assessment Journey`.
 - [ ] تنفيذ `Batch 4 — Results & Security`.
 - [ ] تنفيذ `Batch 5 — Finalization & Release`.

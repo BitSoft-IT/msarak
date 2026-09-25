@@ -357,7 +357,7 @@ class AssessmentJourney {
 
                     scaleGrid.appendChild(ratingBtn);
                 });
-
+                ratingDrawer.appendChild(scaleGrid);
                 card.appendChild(ratingDrawer);
             }
 

@@ -40,14 +40,14 @@
     </template>
 
     {{-- رأس التقييم ومؤشر التقدم --}}
-    <div class="mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 transition-all">
+    <div class="card-surface mb-6 sm:p-6 transition-all">
         <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
                 <span class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500">
                     <span class="h-2 w-2 rounded-full bg-brand-600"></span>
                     تقييم الميول المهنية والأكاديمية
                 </span>
-                <h1 class="text-xl font-extrabold text-slate-900 sm:text-2xl tracking-tight">استكشاف ميولك</h1>
+                <h1 class="text-xl font-extrabold text-slate-900 sm:text-2xl">استكشاف ميولك</h1>
             </div>
 
             <div class="text-start sm:text-end">
@@ -62,12 +62,12 @@
 
         {{-- شريط التقدم المرئي --}}
         <div class="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-slate-100" role="progressbar" id="progress-bar-container" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-            <div id="progress-bar-fill" class="h-full rounded-full bg-brand-600 transition-all duration-300 ease-out" style="width: 0%;"></div>
+            <div id="progress-bar-fill" class="h-full rounded-full bg-gradient-to-l from-brand-500 to-brand-700 shadow-xs shadow-brand-600/40 transition-all duration-300 ease-out" style="width: 0%;"></div>
         </div>
     </div>
 
     {{-- بطاقة الموقف الحالية --}}
-    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 transition-all hover:shadow-md">
+    <div class="card-surface sm:p-8">
         {{-- سيناريو الموقف --}}
         <div class="mb-6 border-b border-slate-100 pb-5">
             <div class="mb-3 flex items-center justify-between">
@@ -89,17 +89,17 @@
         </div>
 
         {{-- تنبيه الأخطاء إن حدثت --}}
-        <div id="error-alert" class="mb-6 hidden rounded-xl border-s-4 border-red-600 bg-red-50 p-4 text-red-900 shadow-xs" role="alert">
+        <div id="error-alert" class="mb-6 hidden rounded-xl border-s-4 border-danger-600 bg-danger-50 p-4 text-danger-700 shadow-xs" role="alert">
             <div class="flex items-start justify-between gap-3">
                 <div class="flex items-start gap-2.5">
-                    <svg class="h-5 w-5 text-red-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <svg class="h-5 w-5 text-danger-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                     </svg>
                     <div>
                         <p id="error-alert-message" class="text-sm font-medium">تعذر حفظ الإجابة. حاول مرة أخرى.</p>
                     </div>
                 </div>
-                <button type="button" id="retry-save-btn" class="inline-flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1 text-xs font-bold text-white shadow-xs hover:bg-red-700 transition-colors">
+                <button type="button" id="retry-save-btn" class="inline-flex items-center gap-1 rounded-lg bg-danger-600 px-3 py-1 text-xs font-bold text-white shadow-xs hover:bg-danger-700 transition-colors">
                     <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                     </svg>
@@ -179,7 +179,7 @@
                     </svg>
                 </button>
 
-                <button type="button" id="complete-btn" class="btn bg-green-700 text-white hover:bg-green-800 text-sm min-w-32 gap-2 shadow-xs hidden">
+                <button type="button" id="complete-btn" class="btn btn-success text-sm min-w-32 gap-2 shadow-xs hidden">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
@@ -190,7 +190,7 @@
     </div>
 
     {{-- شبكة التنقل السريع بين المواقف الـ 18 --}}
-    <nav aria-label="التنقل بين مواقف التقييم" class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <nav aria-label="التنقل بين مواقف التقييم" class="card-surface mt-6 p-5">
         <div class="mb-3.5 flex flex-wrap items-center justify-between gap-2">
             <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">خريطة المواقف (1 — 18)</h3>
             <div class="flex items-center gap-4 text-xs text-slate-500">
@@ -244,14 +244,14 @@
             <p class="text-sm leading-relaxed text-slate-700">
                 تأكد من مراجعة إجاباتك. بعد إكمال التقييم لن تتمكن من تعديل هذه الجلسة.
             </p>
-            <div id="completion-modal-error" class="mt-3 hidden text-xs font-semibold text-red-600">
+            <div id="completion-modal-error" class="mt-3 hidden text-xs font-semibold text-danger-600">
                 لم تكتمل المواقف المطلوبة بعد. راجع المواقف التي تحتاج معالجة، ثم حاول إكمال التقييم مرة أخرى.
             </div>
             <div class="mt-6 flex flex-wrap items-center justify-end gap-3">
                 <button type="button" id="completion-cancel-btn" class="btn btn-secondary text-sm">
                     متابعة المراجعة
                 </button>
-                <button type="button" id="completion-confirm-btn" class="btn bg-green-700 text-white hover:bg-green-800 text-sm">
+                <button type="button" id="completion-confirm-btn" class="btn btn-success text-sm">
                     إكمال التقييم
                 </button>
             </div>

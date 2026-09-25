@@ -6,10 +6,10 @@
 <div class="mx-auto max-w-4xl space-y-8">
 
     {{-- 1. Hero Card: الهوية البصرية الرئيسية للتقييم --}}
-    <section class="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-brand-50/20 to-indigo-50/30 p-6 sm:p-10 lg:p-12 shadow-sm transition-all hover:shadow-md">
+    <section class="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-brand-50/20 to-brand-100/30 p-6 sm:p-10 lg:p-12 shadow-sm transition-all hover:shadow-md">
         {{-- تأثيرات ضوئية خلفية ناعمة --}}
         <div class="pointer-events-none absolute -end-24 -top-24 h-80 w-80 rounded-full bg-brand-500/10 blur-3xl" aria-hidden="true"></div>
-        <div class="pointer-events-none absolute -start-20 bottom-0 h-60 w-60 rounded-full bg-indigo-500/10 blur-2xl" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute -start-20 bottom-0 h-60 w-60 rounded-full bg-brand-400/10 blur-2xl" aria-hidden="true"></div>
 
         <div class="relative z-10 text-center max-w-2xl mx-auto">
             {{-- شارة المقدمة مع نقطة حية نابضة --}}
@@ -18,7 +18,7 @@
                 <span>رحلة التوجيه الأكاديمي والمهني</span>
             </div>
 
-            <h1 class="mt-5 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+            <h1 class="mt-5 text-3xl font-extrabold text-slate-900 sm:text-4xl lg:text-5xl">
                 استكشاف ميولك
             </h1>
 
@@ -77,7 +77,7 @@
 
     {{-- 2. تنبيه استئناف الجلسة إن وُجدت بتصميم بارز جذاب --}}
     @if ($activeSession)
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-600 to-indigo-700 p-6 sm:p-8 text-white shadow-lg shadow-brand-600/15" role="alert">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-600 to-brand-700 p-6 sm:p-8 text-white shadow-lg shadow-brand-600/15" role="status">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                 <div class="flex items-start gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-xs">
@@ -86,7 +86,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h2 class="text-xl font-bold tracking-tight text-white">لديك تقييم غير مكتمل</h2>
+                        <h2 class="text-xl font-bold text-white">لديك تقييم غير مكتمل</h2>
                         <p class="mt-1 text-sm text-brand-100 leading-relaxed">
                             لديك تقييم غير مكتمل. تم حفظ تقدمك، ويمكنك المتابعة من حيث توقفت.
                         </p>
@@ -132,7 +132,7 @@
         {{-- السلم الخماسي الاختياري --}}
         <div class="rounded-2xl border border-slate-200/90 bg-slate-50/50 p-5 sm:p-6 space-y-4">
             <div class="flex items-start gap-3.5">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-white font-bold text-sm shadow-xs">2</span>
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white font-bold text-sm shadow-xs">2</span>
                 <div>
                     <h3 class="text-base font-bold text-slate-900">التقييم الإضافي (اختياري)</h3>
                     <p class="mt-1.5 text-sm leading-relaxed text-slate-600">
@@ -141,11 +141,11 @@
                 </div>
             </div>
 
-            {{-- معاينة بصرية حية لمستويات السلم الخماسي المعتمدة --}}
+            {{-- معاينة بصرية حية لمستويات السلم الخماسي المعتمدة — تخطيط تبايني: موجبان، محايد بعرض كامل، سالبان --}}
             <div class="mt-3 ps-12">
                 <span class="text-xs font-semibold text-slate-500 block mb-2">مستويات التقييم المعتمدة ومؤشراتها:</span>
-                <div class="flex flex-wrap gap-2.5">
-                    <span class="inline-flex items-center gap-2 rounded-xl border border-emerald-200/90 bg-emerald-50/80 px-3.5 py-2 text-xs font-bold text-emerald-800 shadow-2xs transition-all hover:bg-emerald-100">
+                <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                    <span class="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200/90 bg-emerald-50/80 px-3.5 py-2 text-xs font-bold text-emerald-800 shadow-2xs transition-all hover:bg-emerald-100">
                         <svg class="h-4 w-4 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="12" cy="12" r="10" />
                             <path d="M8 9.5c.5-.8 1.5-.8 2 0" />
@@ -153,10 +153,10 @@
                             <path d="M8 14c1 2.5 7 2.5 8 0" />
                         </svg>
                         <span>يشبهني جدًا</span>
-                        <span class="text-[10px] text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(+2)</span>
+                        <span class="text-xs text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(+2)</span>
                     </span>
 
-                    <span class="inline-flex items-center gap-2 rounded-xl border border-teal-200/90 bg-teal-50/80 px-3.5 py-2 text-xs font-bold text-teal-800 shadow-2xs transition-all hover:bg-teal-100">
+                    <span class="inline-flex items-center justify-center gap-2 rounded-xl border border-teal-200/90 bg-teal-50/80 px-3.5 py-2 text-xs font-bold text-teal-800 shadow-2xs transition-all hover:bg-teal-100">
                         <svg class="h-4 w-4 text-teal-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="12" cy="12" r="10" />
                             <line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3" />
@@ -164,10 +164,10 @@
                             <path d="M8.5 13.5c1 1.8 6 1.8 7 0" />
                         </svg>
                         <span>يشبهني</span>
-                        <span class="text-[10px] text-teal-700 bg-teal-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(+1)</span>
+                        <span class="text-xs text-teal-700 bg-teal-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(+1)</span>
                     </span>
 
-                    <span class="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-slate-100/80 px-3.5 py-2 text-xs font-bold text-slate-800 shadow-2xs transition-all hover:bg-slate-200">
+                    <span class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200/90 bg-slate-100/80 px-3.5 py-2 text-xs font-bold text-slate-800 shadow-2xs transition-all hover:bg-slate-200 sm:col-span-2">
                         <svg class="h-4 w-4 text-slate-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="12" cy="12" r="10" />
                             <line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3" />
@@ -175,10 +175,10 @@
                             <line x1="8.5" y1="14" x2="15.5" y2="14" stroke-width="2" />
                         </svg>
                         <span>محايد / غير متأكد</span>
-                        <span class="text-[10px] text-slate-600 bg-slate-200/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(0)</span>
+                        <span class="text-xs text-slate-600 bg-slate-200/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(0)</span>
                     </span>
 
-                    <span class="inline-flex items-center gap-2 rounded-xl border border-amber-200/90 bg-amber-50/80 px-3.5 py-2 text-xs font-bold text-amber-800 shadow-2xs transition-all hover:bg-amber-100">
+                    <span class="inline-flex items-center justify-center gap-2 rounded-xl border border-amber-200/90 bg-amber-50/80 px-3.5 py-2 text-xs font-bold text-amber-800 shadow-2xs transition-all hover:bg-amber-100">
                         <svg class="h-4 w-4 text-amber-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="12" cy="12" r="10" />
                             <line x1="9" y1="9.5" x2="9.01" y2="9.5" stroke-width="3" />
@@ -186,10 +186,10 @@
                             <path d="M8.5 15.5c1-1.5 6-1.5 7 0" />
                         </svg>
                         <span>لا يشبهني</span>
-                        <span class="text-[10px] text-amber-700 bg-amber-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(-1)</span>
+                        <span class="text-xs text-amber-700 bg-amber-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(-1)</span>
                     </span>
 
-                    <span class="inline-flex items-center gap-2 rounded-xl border border-rose-200/90 bg-rose-50/80 px-3.5 py-2 text-xs font-bold text-rose-800 shadow-2xs transition-all hover:bg-rose-100">
+                    <span class="inline-flex items-center justify-center gap-2 rounded-xl border border-rose-200/90 bg-rose-50/80 px-3.5 py-2 text-xs font-bold text-rose-800 shadow-2xs transition-all hover:bg-rose-100">
                         <svg class="h-4 w-4 text-rose-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="12" cy="12" r="10" />
                             <path d="M8.5 10.5c.5-.5 1.5-.5 2 0" />
@@ -197,18 +197,20 @@
                             <path d="M8 16c1.2-2.5 6.8-2.5 8 0" />
                         </svg>
                         <span>لا يشبهني إطلاقًا</span>
-                        <span class="text-[10px] text-rose-700 bg-rose-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(-2)</span>
+                        <span class="text-xs text-rose-700 bg-rose-100/80 px-1.5 py-0.5 rounded-md font-mono font-bold">(-2)</span>
                     </span>
                 </div>
             </div>
         </div>
 
         {{-- الخيارات الخاصة عند تعذر المطابقة --}}
-        <div class="space-y-4">
-            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-white font-bold text-sm shadow-xs">3</span>
-                خيارات بديلة عند تعذر مطابقة أي من التصرفات
-            </h3>
+        <div class="rounded-2xl border border-slate-200/90 bg-slate-50/50 p-5 sm:p-6 space-y-4">
+            <div class="flex items-start gap-3.5">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white font-bold text-sm shadow-xs">3</span>
+                <h3 class="text-base font-bold text-slate-900">
+                    خيارات بديلة عند تعذر مطابقة أي من التصرفات
+                </h3>
+            </div>
 
             <div class="grid gap-4 sm:grid-cols-2 ps-12">
                 <div class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs transition-all hover:border-slate-300">
@@ -239,7 +241,7 @@
                     <div class="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-slate-900 text-center">
                         لا أستطيع الحكم على هذا الموقف
                     </div>
-                    <p class="mt-2 text-[11px] text-slate-500 text-center">
+                    <p class="mt-2 text-xs text-slate-500 text-center">
                         استخدم هذا الخيار عندما يتعذر عليك الحكم فعلًا، وليس لمجرد التردد العادي بين التصرفات.
                     </p>
                 </div>

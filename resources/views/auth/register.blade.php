@@ -5,7 +5,18 @@
 @section('content')
     <div class="auth-shell">
         <section aria-labelledby="register-title" class="auth-card">
-            <h1 id="register-title" class="text-2xl font-bold">إنشاء حساب</h1>
+            {{-- علامة الهوية على الجوال (اللوحة الجانبية مخفية تحت lg) --}}
+            <div class="mb-5 flex items-center gap-2 lg:hidden" aria-hidden="true">
+                <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-sm font-extrabold text-white shadow-sm shadow-brand-600/30">م</span>
+                <span class="text-lg font-bold text-brand-700">مسارك</span>
+            </div>
+
+            <div class="auth-head">
+                <span class="auth-head-icon">
+                    <x-ui.icon name="user-plus" class="h-5 w-5" />
+                </span>
+                <h1 id="register-title" class="text-2xl font-bold">إنشاء حساب</h1>
+            </div>
 
             <form method="POST" action="{{ route('register') }}" class="auth-form mt-6 space-y-4">
                 @csrf
@@ -20,7 +31,7 @@
                         @error('name') aria-invalid="true" aria-describedby="name-error" @enderror
                     >
                     @error('name')
-                        <p id="name-error" class="mt-1 text-sm text-red-700">{{ $message }}</p>
+                        <p id="name-error" class="mt-1 text-sm text-danger-700">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -34,7 +45,7 @@
                         @error('email') aria-invalid="true" aria-describedby="email-error" @enderror
                     >
                     @error('email')
-                        <p id="email-error" class="mt-1 text-sm text-red-700">{{ $message }}</p>
+                        <p id="email-error" class="mt-1 text-sm text-danger-700">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -59,7 +70,7 @@
 </button>
                     </div>
                     @error('password')
-                        <p id="password-error" class="mt-1 text-sm text-red-700">{{ $message }}</p>
+                        <p id="password-error" class="mt-1 text-sm text-danger-700">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -89,7 +100,7 @@
 
             <p class="mt-4 text-center text-sm text-slate-600">
                 لديك حساب؟
-                <a href="{{ route('login') }}" class="font-medium text-brand-700 hover:underline">سجل الدخول</a>
+                <a href="{{ route('login') }}" class="inline-flex min-h-11 items-center font-medium text-brand-700 underline-offset-4 hover:underline">سجل الدخول</a>
             </p>
         </section>
 

@@ -159,12 +159,28 @@ class RateLimitingTest extends TestCase
 
         $unknownEmail = 'ghost@example.com';
 
+        // The array cache store persists across tests in one process; the
+        // requests below run on the default test IP, so its source window is
+        // cleared explicitly to start both exhaustions from a fresh state.
+        RateLimiter::clear($this->sourceKey());
+
         // Act
         $existingMessage = $this->exhaustAndGetErrorMessage(self::ACCOUNT_EMAIL);
         $unknownMessage = $this->exhaustAndGetErrorMessage($unknownEmail);
 
-        // Assert — identical messages, no account enumeration signal.
-        $this->assertSame($existingMessage, $unknownMessage);
+        // Assert — both must genuinely be throttle messages, otherwise the
+        // identity check below could pass vacuously on identical login errors.
+        $this->assertStringContainsString('محاولات دخول كثيرة', $existingMessage);
+        $this->assertStringContainsString('محاولات دخول كثيرة', $unknownMessage);
+
+        // The seconds countdown is derived from real time (availableIn), so
+        // the two measurements legitimately straddle a second boundary
+        // (900 vs 899). The enumeration check is about the message text,
+        // not the timer value — normalize digits before comparing.
+        $this->assertSame(
+            preg_replace('/\d+/u', '{seconds}', $existingMessage),
+            preg_replace('/\d+/u', '{seconds}', $unknownMessage)
+        );
         $this->assertStringNotContainsString('@example.com', $existingMessage);
     }
 

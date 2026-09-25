@@ -106,7 +106,7 @@
 
 | الاسم | الدور | GitHub Username |
 |---|---|---|
-| طارق العماري | External Technical Reviewer | [@tareq-alomari](https://github.com/tareq-alomari) |
+|م. طارق العمري | External Technical Reviewer | [@tareq-alomari](https://github.com/tareq-alomari) |
 
 > يقوم المراجع التقني الخارجي بمراجعة الأعمال المنجزة والقرارات التقنية وPull Requests الرئيسية  وتقديم ملاحظات فنية على جودة التنفيذ واتساقه， 
 ---

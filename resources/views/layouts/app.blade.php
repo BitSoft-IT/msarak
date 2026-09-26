@@ -26,6 +26,9 @@
             if (auth()->check() && auth()->user()->role === 'student') {
                 $navLinks[] = ['href' => route('assessment.intro'), 'label' => 'استكشاف ميولك', 'current' => request()->routeIs('assessment.*')];
                 $navLinks[] = ['href' => route('profile.results.index'), 'label' => 'سجل نتائجي', 'current' => request()->routeIs('results.*') || request()->routeIs('profile.results.*')];
+                $navLinks[] = ['href' => route('profile.show'), 'label' => 'حسابي', 'current' => request()->routeIs('profile.show')];
+            } elseif (auth()->check() && auth()->user()->role === 'admin') {
+                $navLinks[] = ['href' => route('admin.statistics.index'), 'label' => 'الإحصائيات', 'current' => request()->routeIs('admin.*')];
             }
         @endphp
         <div class="container-page flex items-center justify-between gap-x-6 py-3">

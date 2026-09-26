@@ -48,10 +48,21 @@ Route::middleware(['auth', 'role:student'])->group(function (): void {
 });
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function (): void {
+    Route::get('/assessment-versions', [AdminAssessmentVersionController::class, 'index'])
+        ->name('assessment-versions.index');
+    Route::get('/assessment-versions/{assessmentVersion}', [AdminAssessmentVersionController::class, 'show'])
+        ->whereNumber('assessmentVersion')
+        ->name('assessment-versions.show');
     Route::post('/assessment-versions', [AdminAssessmentVersionController::class, 'store'])
         ->name('assessment-versions.store');
     Route::post('/assessment-versions/{assessmentVersion}/questions', [AdminQuestionController::class, 'store'])
         ->name('assessment-versions.questions.store');
+    Route::get('/assessment-versions/{assessmentVersion}/questions/create', [AdminQuestionController::class, 'create'])
+        ->whereNumber('assessmentVersion')
+        ->name('assessment-versions.questions.create');
+    Route::get('/assessment-versions/{assessmentVersion}/questions/{question}/edit', [AdminQuestionController::class, 'edit'])
+        ->whereNumber('assessmentVersion')
+        ->name('assessment-versions.questions.edit');
     Route::put('/assessment-versions/{assessmentVersion}/questions/{question}', [AdminQuestionController::class, 'update'])
         ->name('assessment-versions.questions.update');
     Route::delete('/assessment-versions/{assessmentVersion}/questions/{question}', [AdminQuestionController::class, 'destroy'])

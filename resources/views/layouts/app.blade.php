@@ -26,6 +26,10 @@
             if (auth()->check() && auth()->user()->role === 'student') {
                 $navLinks[] = ['href' => route('assessment.intro'), 'label' => 'استكشاف ميولك', 'current' => request()->routeIs('assessment.*')];
                 $navLinks[] = ['href' => route('profile.results.index'), 'label' => 'سجل نتائجي', 'current' => request()->routeIs('results.*') || request()->routeIs('profile.results.*')];
+                $navLinks[] = ['href' => route('profile.show'), 'label' => 'حسابي', 'current' => request()->routeIs('profile.show')];
+            } elseif (auth()->check() && auth()->user()->role === 'admin') {
+                $navLinks[] = ['href' => route('admin.assessment-versions.index'), 'label' => 'إدارة التقييم', 'current' => request()->routeIs('admin.assessment-versions.*')];
+                $navLinks[] = ['href' => route('admin.statistics.index'), 'label' => 'الإحصائيات', 'current' => request()->routeIs('admin.statistics.*')];
             }
         @endphp
         <div class="container-page flex items-center justify-between gap-x-6 py-3">
@@ -104,6 +108,9 @@
                                 </li>
                             @endif
                             @if (auth()->user()->role === 'admin')
+                                <li>
+                                    <a href="{{ route('admin.assessment-versions.index') }}" class="inline-flex min-h-11 items-center rounded-lg px-3 text-brand-100/90 transition-colors hover:bg-white/10 hover:text-white">إدارة التقييم</a>
+                                </li>
                                 <li>
                                     <a href="{{ route('admin.statistics.index') }}" class="inline-flex min-h-11 items-center rounded-lg px-3 text-brand-100/90 transition-colors hover:bg-white/10 hover:text-white">الإحصائيات</a>
                                 </li>
